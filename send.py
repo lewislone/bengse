@@ -1,6 +1,10 @@
 #coding: UTF-8
 import os
+import sys
+sys.path.append("./smtplib.py")
 import smtplib
+sys.path.append("./bindip.py")
+import bindip
 from email import encoders
 from email.header import Header
 from email.mime.text import MIMEText
@@ -32,7 +36,7 @@ def send_plain():
         server.sendmail(from_addr, [to_addr], msg.as_string())
         server.quit()
 
-def send_both():
+def send_both(rdIp):
         from_addr = "jdicisyesterday@163.com"
         password = "xxx"
         to_addr = "jdic@qq.com"
@@ -47,7 +51,7 @@ def send_both():
         msg.attach(MIMEText('Hi lll, sorry, this photo is ok, and your ice ', 'plain', 'utf-8'))
         msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
 
-        server = smtplib.SMTP(smtp_server, 25)
+        server = smtplib.SMTP(rdIp, smtp_server, 25)
         server.set_debuglevel(1)
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
@@ -91,5 +95,12 @@ if __name__ == '__main__':
 
     #send_plain()
     #send_html()
-    send_both()
+    print "start ##############################################"
+    bindipobj = bindip.bindIp()
+    bindipobj.randomIp()
+    #socket.socket = bindipobj.changeIp(bindipobj.getIp()) 
+    print "end ##################################"
+    print bindipobj.getIp()
+    print bindipobj.ip
+    send_both(bindipobj.ip)
     #send_html_with_attachment()

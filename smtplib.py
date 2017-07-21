@@ -240,7 +240,7 @@ class SMTP:
     does_esmtp = 0
     default_port = SMTP_PORT
 
-    def __init__(self, host='', port=0, local_hostname=None,
+    def __init__(self, clientIp, host='', port=0,  local_hostname=None,
                  timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         """Initialize a new instance.
 
@@ -257,7 +257,10 @@ class SMTP:
        
         if host:
       #      self.socket.socket.bind(('43.243.209.163', 0))
-            (code, msg) = self.connect(host, port)
+            if clientIp:
+                (code, msg) = self.connect2(clientIp, host, port)
+            else:
+                (code, msg) = self.connect(host, port)
             if code != 220:
                 raise SMTPConnectError(code, msg)
         if local_hostname is not None:
@@ -327,8 +330,8 @@ class SMTP:
             port = self.default_port
         if self.debuglevel > 0:
             print>>stderr, 'connect:', (host, port)
-        #self.sock = self._get_socket(host, port, self.timeout)
- #'''
+        self.sock = self._get_socket(host, port, self.timeout)
+        '''
         print "start##############################################"
         bindipobj = bindip.bindIp()
         bindipobj.randomIp()
@@ -340,11 +343,60 @@ class SMTP:
         #self.sock = self._get_socket2(host, port, self.timeout, ('43.243.209.171', 9001))
         self.sock = self._get_socket2(host, port, self.timeout, (bindipobj.getIp(), 0))
         print "end##############################################"
-        #'''
+        '''
+        
         (code, msg) = self.getreply()
         if self.debuglevel > 0:
             print>>stderr, "connect:", msg
         return (code, msg)
+
+    def connect2(self, clientIp, host='localhost', port=0):
+        """Connect to a host on a given port.
+
+        If the hostname ends with a colon (`:') followed by a number, and
+        there is no port specified, that suffix will be stripped off and the
+        number interpreted as the port number to use.
+
+        Note: This method is automatically invoked by __init__, if a host is
+        specified during instantiation.
+
+        """
+        if not port and (host.find(':') == host.rfind(':')):
+            i = host.rfind(':')
+            if i >= 0:
+                host, port = host[:i], host[i + 1:]
+                try:
+                    port = int(port)
+                except ValueError:
+                    raise socket.error, "nonnumeric port"
+        if not port:
+            port = self.default_port
+        if self.debuglevel > 0:
+            print>>stderr, 'connect:', (host, port)
+        '''
+        print "start##############################################"
+        bindipobj = bindip.bindIp()
+        bindipobj.randomIp()
+        #socket.socket = bindipobj.changeIp(bindipobj.getIp()) 
+        print "##################################"
+        print bindipobj.getIp()
+        #self.sock.bind(('43.243.209.163', 0))
+        #self.sock.bind(((bindipobj.getIp()), 0))
+        #self.sock = self._get_socket2(host, port, self.timeout, ('43.243.209.171', 9001))
+        self.sock = self._get_socket2(host, port, self.timeout, (bindipobj.getIp(), 0))
+        print "end##############################################"
+        '''
+        print "why ##############################################"
+        print clientIp
+        if (clientIp):
+            self.sock = self._get_socket2(host, port, self.timeout, (clientIp, 0))
+        else:
+            raise SMTPServerDisconnected('Alert!!!, cannot bindIp')
+        (code, msg) = self.getreply()
+        if self.debuglevel > 0:
+            print>>stderr, "connect:", msg
+        return (code, msg)
+
 
     def send(self, str):
         """Send `str' to the server."""
