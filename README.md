@@ -8,3 +8,4 @@ GarbageEmail
     - email
     - smtplib
     - webpy
+    - netifaces
