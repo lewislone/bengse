@@ -4,8 +4,9 @@ import lib.ownsmtplib as smtplib
 import DEBUG
 
 def func_test(var):
+    ip = "192.168.1.8"
     smtp_server = "smtp.163.com"
-    server = smtplib.SMTP(smtp_server, 25)
+    server = smtplib.SMTP(ip, smtp_server, 25)
     print var
 
 def new_file(path):

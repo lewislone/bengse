@@ -386,8 +386,7 @@ class SMTP:
         self.sock = self._get_socket2(host, port, self.timeout, (bindipobj.getIp(), 0))
         print "end##############################################"
         '''
-        print "why ##############################################"
-        print clientIp
+        print 'bind ip: ' + clientIp
         if (clientIp):
             self.sock = self._get_socket2(host, port, self.timeout, (clientIp, 0))
         else:
