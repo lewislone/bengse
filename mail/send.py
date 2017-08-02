@@ -15,15 +15,24 @@ import utils.test as test
 
 
 class mail():
-    def __init__(self, addr, pw, smpt):
+    def __init__(self, addr, pw, smpt, ip):
         self.from_addr = addr 
         self.password = pw 
-        self.smtp_server = smpt 
+        self.server = smtplib.SMTP(ip, smtp, 25)
+        self.server.set_debuglevel(1)
 
 
     def _format_addr(self, s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
+
+    def loginsmtp(self):
+        try
+            self.server.login(self.from_addr, self.password)
+        except smtplib.SMTPException, e:
+            print e
+            return e[0]
+        retrun 0
 
     def send_text(self, ip, to, content, content_type):#content_type: 'html', 'plain'
         #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
@@ -32,11 +41,8 @@ class mail():
         msg['To'] = self._format_addr('lll <%s>' % to)
         msg['Subject'] = Header('接冰…', 'utf-8').encode()
 
-        server = smtplib.SMTP(ip, self.smtp_server, 25)
-        server.set_debuglevel(1)
-        server.login(self.from_addr, self.password)
-        server.sendmail(self.from_addr, [to], msg.as_string())
-        server.quit()
+        self.server.sendmail(self.from_addr, [to], msg.as_string())
+        self.server.quit()
 
     def send_both(self, ip, to, content):
 
@@ -50,11 +56,12 @@ class mail():
         #msg.attach(MIMEText('Hi lll, sorry, this photo is ok, and your ice ', 'plain', 'utf-8'))
         #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
 
-        server = smtplib.SMTP(ip, self.smtp_server, 25)
-        server.set_debuglevel(1)
-        server.login(self.from_addr, self.password)
-        server.sendmail(self.from_addr, [to], msg.as_string())
-        server.quit()
+        try:
+            self.server.sendmail(self.from_addr, [to], msg.as_string())
+        except smtplib.SMTPException, e:
+            print e
+            return e[0]
+        retrun 0
 
     def send_html_with_attachment(self, ip, to, content, content_type, attachment_path):
         msg = MIMEMultipart()
@@ -79,12 +86,15 @@ class mail():
         #msg.attach(MIMEText('<html><body><h1>Hi this my photo: </h1>' + '<p><img src="cid:0"></p>' + '</body></html>', 'html', 'utf-8'))
         msg.attach(MIMEText(content, content_type, 'utf-8'))
 
-        server = smtplib.SMTP(ip, self.smtp_server, 25)
-        server.set_debuglevel(1)
-        server.login(self.from_addr, self.password)
-        server.sendmail(self.from_addr, [to], msg.as_string())
-        server.quit()
+        try:
+            self.server.sendmail(self.from_addr, [to], msg.as_string())
+        except smtplib.SMTPException, e:
+            print e
+            return e[0]
+        retrun 0
 
+    def quit(self):
+        self.server.quit()
 
 if __name__ == '__main__':
 
