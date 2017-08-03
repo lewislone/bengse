@@ -15,3 +15,8 @@ def loadtojson(file):
                     account['pw'] = row[1]
                     json_file.write(json.dumps(account))
 
+
+def loadjson(file):
+    with open(file) as json_file:
+        data = json.load(json_file)
+        return data
