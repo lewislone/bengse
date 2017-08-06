@@ -16,8 +16,8 @@ import utils.test as test
 
 class mail():
     def __init__(self, addr, pw, smpt, ip):
-        self.from_addr = addr 
-        self.password = pw 
+        self.from_addr = addr
+        self.password = pw
         self.server = smtplib.SMTP(ip, smtp, 25)
         self.server.set_debuglevel(1)
 
@@ -27,12 +27,12 @@ class mail():
         return formataddr((Header(name, 'utf-8').encode(), addr))
 
     def loginsmtp(self):
-        try
+        try:
             self.server.login(self.from_addr, self.password)
         except smtplib.SMTPException, e:
             print e
             return e[0]
-        retrun 0
+        return 0
 
     def send_text(self, ip, to, content, content_type):#content_type: 'html', 'plain'
         #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
@@ -61,7 +61,7 @@ class mail():
         except smtplib.SMTPException, e:
             print e
             return e[0]
-        retrun 0
+        return 0
 
     def send_html_with_attachment(self, ip, to, content, content_type, attachment_path):
         msg = MIMEMultipart()
@@ -91,7 +91,7 @@ class mail():
         except smtplib.SMTPException, e:
             print e
             return e[0]
-        retrun 0
+        return 0
 
     def quit(self):
         self.server.quit()
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     print "start ##############################################"
     bindipobj = bindip.bindIp()
     bindipobj.randomIp()
-    #socket.socket = bindipobj.changeIp(bindipobj.getIp()) 
+    #socket.socket = bindipobj.changeIp(bindipobj.getIp())
     print "end ##################################"
     print bindipobj.getIp()
     print bindipobj.ip

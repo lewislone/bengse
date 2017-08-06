@@ -21,9 +21,58 @@ web.template.Template.globals['render'] = render
 
 c = {
         'debug'     : True,
-        'warning'   : True,
-        'db_url'    : 'http://127.0.0.1:5984/',
-        'db_name'   : {
-                        'cover' : 'albumcover'
-                      }  
+        'db_url'    : './tmp/main.db',
+        'db_name'   : [ 
+                        { 
+                         'name': 'account',
+                         'keys': ['id', 'account', 'passwd', 'smtp', 'mini_interval', 'max_times_per_day', 'status', 'ip_map', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS account (
+                                  'id' int(11) NOT NULL,
+                                  `account` varchar(40) NOT NULL,
+                                  `passwd` varchar(20) NOT NULL,
+                                  `smtp` varchar(20) NOT NULL,
+                                  `min_interval` int(8) NOT NULL,
+                                  `max_times_per_day` int(8) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `ip_map` char(32) NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`account`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'receiver',
+                         'keys': ['id', 'email', 'status', 'account_map', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS receiver (
+                                  'id' int(11) NOT NULL,
+                                  `email` varchar(40) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `account_map` char(32) NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`email`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'ip',
+                         'keys': ['id', 'addr', 'status', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS ip (
+                                  'id' int(11) NOT NULL,
+                                  `addr` varchar(40) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`addr`)
+                                )
+                                ''',
+                        },
+                      ],
     }

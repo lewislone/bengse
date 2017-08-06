@@ -1,7 +1,6 @@
 #-*-coding:utf-8-*-
 import os
 import json
-
 from config import settings
 import web
 
@@ -9,7 +8,7 @@ web.config.debug = True
 
 class UploadFile:
 	def __init__(self):
-        	self.render = settings.render 
+        	self.render = settings.render
 	""" 文件上传 """
 	def GET(self):
 		return self.render.file_upload()

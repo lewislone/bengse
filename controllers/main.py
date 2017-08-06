@@ -4,17 +4,17 @@ import os
 import DEBUG
 
 from config import settings
-import mail.send as send 
+import mail.send as send
 
 class Test:
     def __init__(self):
-        self.render = settings.render 
+        self.render = settings.render
 
     def GET(self):
         return self.render.test()
 
     def POST(self):
-        data = web.input(path={}) 
+        data = web.input(path={})
         if data.type:
             DEBUG.p('get limit: %s' % (data.type))
         if data.sento:
@@ -29,8 +29,8 @@ class Test:
         smtp_server = 'smtp.163.com'
         m = send.mail(from_addr, password, smtp_server)
 
-        ip = data.bindip 
-        to = data.sento 
+        ip = data.bindip
+        to = data.sento
         text_type = data.type
         content = data.content
         #content = '<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>'

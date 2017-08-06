@@ -5,11 +5,11 @@ pre_fix = 'controllers.'
 
 urls = (
      '/',        pre_fix + 'main.Test',
-#    '/index',   'controllers.handle_templates.index',
-    '/upload',   'controllers.upload_file.UploadFile',
-#    '/recipients', 'controllers.preview_recipients.browse',
-#    '/statics', 'controllers.handle_templates.statics',
+#    '/index',   pre_fix + 'andle_templates.index',
+    '/upload',   pre_fix + 'upload_file.UploadFile',
+#    '/recipients', pre_fix + 'preview_recipients.browse',
+#    '/statics', pre_fix + 'handle_templates.statics',
 
-#    '/(?:img|js|css)/.*', 'controllers.public.public',
+#    '/(?:img|js|css)/.*', pre_fix + 'public.public',
 
 )

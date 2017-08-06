@@ -2,6 +2,7 @@
 import csv
 import os
 import sqlite3
+from config import settings
 
 #read pagesize at a time
 def ipager(serial, pagesize):
@@ -27,7 +28,7 @@ class csv2sqlite:
 		print self.DictReader
 		'''
 	def create_db(dbname):
-		#with sqlite3.connect(dbname) as conn:  
+		#with sqlite3.connect(dbname) as conn:
     		#	cursor = conn.cursor()
 		self.dbConn = sqlite3.connect(dbname)
 
@@ -45,7 +46,7 @@ class csv2sqlite:
             		self.dbConn.commit()
         	finally :
             		if cur :
-                		self.dbConn.rollback() 
+                		self.dbConn.rollback()
 
 	def execute_sql_string(self, sqlString, parameters=None):
         	cur = None
@@ -55,13 +56,13 @@ class csv2sqlite:
             		self.dbConn.commit()
         	finally :
             		if cur :
-                		self.dbConn.rollback() 
+                		self.dbConn.rollback()
 
     	def create_table(self, tableName, fields):
         	#fields = ",".join(self._fields())
         	sqlString = """DROP TABLE IF EXISTS [{0}];
                 	CREATE TABLE [{0}] ({1});""".format(tableName, fields)
-        	self.execute_sql_script(sqlString) 
+        	self.execute_sql_script(sqlString)
 
 	def execute_sql(self, cur, sqlStatement):
 		return cur.execute(sqlStatement)
@@ -72,7 +73,7 @@ class csv2sqlite:
 	def select_table(conn, tablename):
 		sqlString = """
                 	SELECT *  FROM TABLE [{0}];""".format(tableName)
-        	self.execute_sql_script(sqlString) 
+        	self.execute_sql_script(sqlString)
 
 
 	def insert_table(conn, tablename, fields):
@@ -233,8 +234,8 @@ if __name__ == '__main__':
 	#c2s=csv2sqlite()	
 	#c2s.open_csv('./receiver.csv')
 	#c2s.open_csv('/Users/liaozq/work/mail/receiver.csv')
-    
-    loader = csvSQLiteConvert('mail.db')
+
+    loader = csvSQLiteConvert(setting.c['db_url'])
     loader.loadCSVtoTable('./tmp/receiver.csv', 'receiver')
     loader.loadCSVtoTable('./tmp/account.csv', 'account')
     loader.close()
