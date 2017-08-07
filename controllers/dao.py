@@ -1,6 +1,7 @@
 # coding: UTF-8
 import os
 import sqlite3
+import time
 from config import settings
 
 '''
@@ -76,13 +77,6 @@ class Dao:
             sql = 'SELECT * FROM %s WHERE ID = ?'%(table)
             fetchone(conn, sql, id)
 
-    def insertone(self, table):
-        if table is "account":
-        elif tables is "ip":
-        elif tables is "receiver":
-        else:
-            print "table %s is not exist"%table
-
     def delete_by_id(self, table, id):
         if table is not None and table != '':
             sql = 'DELETE FROM %s WHERE ID = %d' % (table, id)
@@ -156,6 +150,37 @@ class Dao:
             else:
                 print "table %s is not exist"%table
             self.update_by_key_value(table, key_map, map, key, value)
+
+    def insertone(self, table, new):
+        row = {}
+        count = self.__total_row(table)
+        row['id'] = count+1 
+        row['status'] = 1
+        if table is "account":
+            row['account'] = new['account']
+            row['passwd'] = new['passwd']
+            row['last_time'] = int(time.time()) 
+            row['ip_map'] = []
+            for i in range(256):
+                row['ip_map'].append(0)
+            if 
+            com = row['account'][-6:]
+            if com in settings.c['smtp'].keys():
+                row['smtp'] = settings.c['smtp_mapping'][com]['smtp']
+                row['mini_interval'] = settings.c['smtp_mapping'][com]['interval']
+                row['max_times_per_day'] = settings.c['smtp_mapping'][com]['max']
+            else:
+                print row['account'], ' can not be config'
+        elif tables is "ip":
+            row['addr'] = new['addr']
+        elif tables is "receiver":
+            row['email'] = new['email']
+            row['last_time'] = int(time.time()) 
+            row['account_map'] = []
+            for i in range(1024):
+                row['account_map'].append(0)
+        else:
+            print "table %s is not exist"%table
 
     def drop_table(self, table):
         if table is not None and table != '':
