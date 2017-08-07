@@ -25,7 +25,7 @@ c = {
         'db_name'   : [
                         { 
                          'name': 'account',
-                         'keys': ['id', 'account', 'passwd', 'smtp', 'mini_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'reserve1', 'reserve2', 'reserve3'],
+                         'keys': ['id', 'account', 'passwd', 'smtp', 'min_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'reserve1', 'reserve2', 'reserve3'],
                          'sql' : '''
                                 CREATE TABLE IF NOT EXISTS account (
                                   'id' int(11) NOT NULL,

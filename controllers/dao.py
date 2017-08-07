@@ -10,7 +10,7 @@ account = [
             'account': 'a91014672@163.com',
             'passwd': 'aa77888',
             'smtp': 'smtp.163.com',
-            'mini_interval': 20,
+            'min_interval': 20,
             'maxtimepeday': 40,
             'status': 1,                    #0:dead 1:live
             'ip_map': 110001010001000000...,#ip mapping 0:dead 1:live
@@ -61,33 +61,46 @@ class Dao:
         count = 0
         if table is not None and table != '':
             sql = 'select count(*) from %s' % table
-            count = self.cursor.execute(sql)
-        return count
+            self.cursor.execute(sql)
+            re = self.cursor.fetchone() 
+        return re[0] 
 
     def fetchall(self, table):
         if table is not None and table != '':
             sql = 'select * from %s' % table
             self.cursor.execute(sql)
             re = self.cursor.fetchall()
-            print len(re)
-        return count
+            print len(re), re
+            return re
+
+    def fetchone(self, sql):
+        if sql is not None and sql != '':
+            self.cursor.execute(sql)
+            re = self.cursor.fetchall()
+            print re
+            return re
 
     def fetchone_by_id(self, table, id):
         if table is not None and table != '':
-            sql = 'SELECT * FROM %s WHERE ID = ?'%(table)
-            fetchone(conn, sql, id)
+            sql = 'SELECT * FROM %s WHERE ID = "%s"'%(table, str(id))
+            return self.fetchone(sql)
+
+    def fetchone_by_key_value(self, table, key, value):
+        if table is not None and table != '':
+            sql = 'SELECT * FROM %s WHERE %s = "%s"'%(table, key, str(value))
+            return self.fetchone(sql)
 
     def delete_by_id(self, table, id):
         if table is not None and table != '':
-            sql = 'DELETE FROM %s WHERE ID = %d' % (table, id)
+            sql = 'DELETE FROM %s WHERE ID = "%s"' % (table, str(id))
             self.cursor.execute(sql)
-            conn.commit()
+            self.conn.commit()
 
     def delete_by_key_value(self, table, key, value):
         if table is not None and table != '':
-            sql = 'DELETE FROM %s WHERE %s = %s' % (table, key, str(value))
+            sql = 'DELETE FROM %s WHERE %s = "%s"' % (table, key, str(value))
             self.cursor.execute(sql)
-            conn.commit()
+            self.conn.commit()
 
     def delete_by_primary_key(self, table, value):
         if table is not None and table != '':
@@ -104,9 +117,9 @@ class Dao:
 
     def update_by_key_value(self, table, update_key, new_value, key, value):
         if table is not None and table != '':
-            sql = 'UPDATE %s SET %s = %s WHERE %s = %s'%(table, update_key, str(new_value), key, str(value))
+            sql = 'UPDATE %s SET %s = "%s" WHERE %s = "%s"'%(table, update_key, str(new_value), key, str(value))
             self.cursor.execute(sql)
-            conn.commit()
+            self.conn.commit()
 
     def update_status_by_key_value(self, table, key, value, status):
         if table is not None and table != '':
@@ -154,23 +167,25 @@ class Dao:
     def insertone(self, table, new):
         row = {}
         count = self.__total_row(table)
-        row['id'] = count+1 
-        row['status'] = 1
+        count = count + 1
+        row['id'] = str(count)
+        row['status'] = '1'
         if table is "account":
             row['account'] = new['account']
             row['passwd'] = new['passwd']
-            row['last_time'] = int(time.time()) 
-            row['ip_map'] = []
+            row['last_time'] = str(int(time.time()))
+            tmp = []
             for i in range(256):
-                row['ip_map'].append(0)
-            if 
+                tmp.append('0')
+            row['ip_map'] = ''.join(tmp) 
             com = row['account'][-6:]
-            if com in settings.c['smtp'].keys():
+            if com in settings.c['smtp_mapping'].keys():
                 row['smtp'] = settings.c['smtp_mapping'][com]['smtp']
-                row['mini_interval'] = settings.c['smtp_mapping'][com]['interval']
-                row['max_times_per_day'] = settings.c['smtp_mapping'][com]['max']
+                row['min_interval'] = str(settings.c['smtp_mapping'][com]['interval'])
+                row['max_times_per_day'] = str(settings.c['smtp_mapping'][com]['max'])
             else:
                 print row['account'], ' can not be config'
+                return
         elif tables is "ip":
             row['addr'] = new['addr']
         elif tables is "receiver":
@@ -181,18 +196,28 @@ class Dao:
                 row['account_map'].append(0)
         else:
             print "table %s is not exist"%table
+            return
+
+        row['reserve1'] = ''
+        row['reserve2'] = ''
+        row['reserve3'] = ''
+        tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
+        sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
+        print sql
+        self.cursor.execute(sql)
+        self.conn.commit()
 
     def drop_table(self, table):
         if table is not None and table != '':
             sql = 'DROP TABLE IF EXISTS ' + table
             self.cursor.execute(sql)
-            conn.commit()
+            self.conn.commit()
 
     def init_tables(self):
         for i in range(len(settings.c['db_name'])):
             self.cursor.execute(settings.c['db_name'][i]['sql'])
 
-        conn.commit()
+        self.conn.commit()
 
     def close(self):
         self.conn.close()

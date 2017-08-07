@@ -51,4 +51,12 @@ if __name__ == "__main__":
     #loadcvs.loadtojson(os.getcwd() + u"/邮箱.cvs")
     db = dao.Dao()
     db.init_tables()
-    print db.__total_row("account")
+    new = {'account':'a91008950@163.com', 'passwd':'aa777888'}
+    #db.insertone('account', new)
+    #db.delete_by_key_value('account', 'account', 'a91008950@163.com')
+    #db.fetchall("account")
+    #db.delete_by_id('account', 2)
+    #db.update_status_by_key_value('account', 'account', 'a91008950@163.com', 0)
+    db.fetchall("account")
+    db.fetchone_by_id("account", 1)
+    db.fetchone_by_key_value("account", "account", "a91008950@163.com" )
