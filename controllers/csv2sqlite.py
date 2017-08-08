@@ -2,7 +2,6 @@
 import csv
 import os
 import sqlite3
-from config import settings
 
 #read pagesize at a time
 def ipager(serial, pagesize):
@@ -17,22 +16,38 @@ def ipager(serial, pagesize):
 
 
 class csv2sqlite:
-	def open_csv(self, csvfile):
-		with  open(csvfile, 'rb') as handle:
-			#print csv.reader(handle)
-			for rows in ipager(csv.reader(handle,delimiter=','), 1):
-				print rows
-		'''
-		cf=open(csvfile, 'rb')
-		self.DictReader=csv.DictReader(cf)
-		print self.DictReader
-		'''
-	def create_db(dbname):
+    def __init__(self, csvfile):
+        self.csvfile = csvfile 
+
+    def __readFile(self):
+        try:
+
+            csv.register_dialect('lines', quotechar="'", delimiter=',',
+                     quoting=csv.QUOTE_NONNUMERIC, skipinitialspace=True)
+
+            #This will make sure to close file even if exception is raised
+            with open(self.csvfile, 'rb') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                # treat the file object as an iterable,and automatically
+                # use buffered IO and memory management to help with large files
+                    yield row
+        except Exception as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            print "File {} NOT found".format(self.csvfile)
+
+    def open_csv(self):
+        fd = open(self.csvfile, 'rb')
+        for row in self.__readFile():
+            print row.keys()
+        fd.close()
+
+	def create_db(self, dbname):
 		#with sqlite3.connect(dbname) as conn:
     		#	cursor = conn.cursor()
 		self.dbConn = sqlite3.connect(dbname)
 
-	def close_db(dbname):
+	def close_db(self, dbname):
 		self.dbConn.close()
 
 	def execute_script(self, cur, sqlscript):
@@ -231,12 +246,11 @@ class csvSQLiteConvert:
 
 
 if __name__ == '__main__':
-	#c2s=csv2sqlite()	
-	#c2s.open_csv('./receiver.csv')
-	#c2s.open_csv('/Users/liaozq/work/mail/receiver.csv')
+	c2s=csv2sqlite('./tmp/account.csv')	
+	c2s.open_csv()
 
-    loader = csvSQLiteConvert(setting.c['db_url'])
-    loader.loadCSVtoTable('./tmp/receiver.csv', 'receiver')
-    loader.loadCSVtoTable('./tmp/account.csv', 'account')
-    loader.close()
+    #loader = csvSQLiteConvert(setting.c['db_url'])
+    #loader.loadCSVtoTable('./tmp/receiver.csv', 'receiver')
+    #loader.loadCSVtoTable('./tmp/account.csv', 'account')
+    #loader.close()
 
