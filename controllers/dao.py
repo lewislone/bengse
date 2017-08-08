@@ -106,9 +106,9 @@ class Dao:
         if table is not None and table != '':
             if table is "account":
                 key = 'account'
-            elif tables is "ip":
+            elif table is "ip":
                 key = 'addr'
-            elif tables is "receiver":
+            elif table is "receiver":
                 key = 'email'
             else:
                 print "table %s is not exist"%table
@@ -133,9 +133,9 @@ class Dao:
         if table is not None and table != '':
             if table is "account":
                 key = 'account'
-            elif tables is "ip":
+            elif table is "ip":
                 key = 'addr'
-            elif tables is "receiver":
+            elif table is "receiver":
                 key = 'email'
             else:
                 print "table %s is not exist"%table
@@ -146,7 +146,7 @@ class Dao:
         if table is not None and table != '':
             if table is "account":
                 key_map = 'ip_map'
-            elif tables is "receiver":
+            elif table is "receiver":
                 key_map = 'account_map'
             else:
                 print "table %s is not exist"%table
@@ -157,12 +157,26 @@ class Dao:
             if table is "account":
                 key = 'account'
                 key_map = 'ip_map'
-            elif tables is "receiver":
+            elif table is "receiver":
                 key = 'email'
                 key_map = 'account_map'
             else:
                 print "table %s is not exist"%table
             self.update_by_key_value(table, key_map, map, key, value)
+
+    def find_by_primary_key(self, table, value):
+        if table is not None and table != '':
+            if table is "account":
+                key = 'account'
+            elif table is "ip":
+                key = 'addr'
+            elif table is "receiver":
+                key = 'email'
+            else:
+                print "table %s is not exist"%table
+                return
+        re = self.fetchone_by_key_value(table, key, value)
+        return len(re)
 
     def insertone(self, table, new):
         row = {}
@@ -171,6 +185,9 @@ class Dao:
         row['id'] = str(count)
         row['status'] = '1'
         if table is "account":
+            if self.find_by_primary_key(table, new['account']) > 0:
+                print 'account: %s exist'%new['account']
+                return
             row['account'] = new['account']
             row['passwd'] = new['passwd']
             row['last_time'] = str(int(time.time()))
@@ -186,14 +203,21 @@ class Dao:
             else:
                 print row['account'], ' can not be config'
                 return
-        elif tables is "ip":
+        elif table is "ip":
+            if self.find_by_primary_key(table, new['addr']) > 0:
+                print 'addr: %s exist'%new['addr']
+                return
             row['addr'] = new['addr']
-        elif tables is "receiver":
+        elif table is "receiver":
+            if self.find_by_primary_key(table, new['email']) > 0:
+                print 'email: %s exist'%new['email']
+                return
             row['email'] = new['email']
-            row['last_time'] = int(time.time()) 
-            row['account_map'] = []
+            row['last_time'] = str(int(time.time()))
+            tmp = []
             for i in range(1024):
-                row['account_map'].append(0)
+                tmp.append('0')
+            row['account_map'] = ''.join(tmp)
         else:
             print "table %s is not exist"%table
             return
@@ -206,6 +230,16 @@ class Dao:
         print sql
         self.cursor.execute(sql)
         self.conn.commit()
+
+    def execute_script(self, sqlscript):
+        return self.cursor.executescript(sqlscript)
+
+    def execute_sql_script(self, sqlScript):
+        try:
+            self.execute_script(sqlScript)
+            self.conn.commit()
+        finally :
+            print 'execute script done'
 
     def drop_table(self, table):
         if table is not None and table != '':

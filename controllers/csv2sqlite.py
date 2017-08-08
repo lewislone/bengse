@@ -2,6 +2,7 @@
 import csv
 import os
 import sqlite3
+import dao
 
 #read pagesize at a time
 def ipager(serial, pagesize):
@@ -18,6 +19,8 @@ def ipager(serial, pagesize):
 class csv2sqlite:
     def __init__(self, csvfile):
         self.csvfile = csvfile 
+        self.db = dao.Dao()
+        self.db.init_tables()
 
     def __readFile(self):
         try:
@@ -36,69 +39,25 @@ class csv2sqlite:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
             print "File {} NOT found".format(self.csvfile)
 
-    def open_csv(self):
+    def csv2db(self, type):
         fd = open(self.csvfile, 'rb')
         for row in self.__readFile():
-            print row.keys()
+            #print row.keys()
+            #print row.values()
+            if type is 2: #account
+                new = {row.keys()[0]:row.values()[0], row.keys()[1]:row.values()[1]}
+                self.db.insertone('account', new)
+            if type is 1: #receiver
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('receiver', new)
+            if type is 0: #ip
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('ip', new)
         fd.close()
 
-	def create_db(self, dbname):
-		#with sqlite3.connect(dbname) as conn:
-    		#	cursor = conn.cursor()
-		self.dbConn = sqlite3.connect(dbname)
+    def close_db(self):
+        self.db.close()
 
-	def close_db(self, dbname):
-		self.dbConn.close()
-
-	def execute_script(self, cur, sqlscript):
-        	return cur.executescript(sqlscript)
-
-	def execute_sql_script(self, sqlScript):
-        	cur = None
-        	try:
-            		cur = self.dbConn.cursor()
-            		self.execute_script(cur, sqlScript)
-            		self.dbConn.commit()
-        	finally :
-            		if cur :
-                		self.dbConn.rollback()
-
-	def execute_sql_string(self, sqlString, parameters=None):
-        	cur = None
-        	try:
-            		cur = self._dbConn.cursor()
-            		self.executemany_sql(cur, sqlString, parameters)
-            		self.dbConn.commit()
-        	finally :
-            		if cur :
-                		self.dbConn.rollback()
-
-    	def create_table(self, tableName, fields):
-        	#fields = ",".join(self._fields())
-        	sqlString = """DROP TABLE IF EXISTS [{0}];
-                	CREATE TABLE [{0}] ({1});""".format(tableName, fields)
-        	self.execute_sql_script(sqlString)
-
-	def execute_sql(self, cur, sqlStatement):
-		return cur.execute(sqlStatement)
-
-	def executemany_sql(self, cur, sqlStatement, parameters=None):
-		return cur.executemany(sqlStatement, parameters)
-'''
-	def select_table(conn, tablename):
-		sqlString = """
-                	SELECT *  FROM TABLE [{0}];""".format(tableName)
-        	self.execute_sql_script(sqlString)
-
-
-	def insert_table(conn, tablename, fields):
-		
-	def delete_table(conn, tablename, fields):
-		
-	def delete_db(dbname):
-
-	def update_db(conn, tablename):
-'''
 
 class csvSQLiteConvert:
     '''
@@ -247,7 +206,7 @@ class csvSQLiteConvert:
 
 if __name__ == '__main__':
 	c2s=csv2sqlite('./tmp/account.csv')	
-	c2s.open_csv()
+	c2s.csv2db(2)
 
     #loader = csvSQLiteConvert(setting.c['db_url'])
     #loader.loadCSVtoTable('./tmp/receiver.csv', 'receiver')
