@@ -4,7 +4,7 @@ import web
 
 app_root = os.path.dirname(__file__)
 templates_root = os.path.join(app_root, '../templates')
-render = web.template.render(templates_root, cache=False)
+render = web.template.render(templates_root, base='../templates/base', cache=False)
 
 #db = web.database(dbn='mysql', db='cover', user='root', pw='lewis')
 
