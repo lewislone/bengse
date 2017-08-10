@@ -1,5 +1,4 @@
 # coding: UTF-8
-import os
 import utils.loadcvs as loadcvs
 import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite

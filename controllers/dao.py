@@ -1,5 +1,4 @@
 # coding: UTF-8
-import os
 import sqlite3
 import time
 from config import settings
@@ -34,13 +33,16 @@ ip = [
 
 
 class Dao:
-    def __init__(self):
+    def __init__(self, dbPath=''):
         '''
         Initialise CSQliteloader Class
         '''
 
         #Initialise connection and Class Variables
-        self.SQLiteDBfileName = settings.c['db_url'] 
+        if dbPath:
+            self.SQLiteDBfileName = dbPath
+        else:
+            self.SQLiteDBfileName = settings.c['db_url']
         self.conn = sqlite3.connect(self.SQLiteDBfileName)
         self.cursor = self.conn.cursor()
 

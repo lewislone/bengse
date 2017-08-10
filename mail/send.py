@@ -1,6 +1,4 @@
 #coding: UTF-8
-import os
-import sys
 import lib.ownsmtplib as smtplib
 import lib.bindip as bindip
 from email import encoders
@@ -14,7 +12,7 @@ from email.utils import parseaddr, formataddr
 import utils.test as test
 
 
-class mail():
+class Mail():
     def __init__(self, addr, pw, smpt, ip):
         self.from_addr = addr
         self.password = pw
