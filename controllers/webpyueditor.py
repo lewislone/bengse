@@ -1,13 +1,10 @@
-__author__ = 'rui'
 #coding=utf-8
 import base64
 import uuid
 import urllib2
 import os
 import sys
-sys.path.append("./utils/webpy")
-#sys.path.append("/home/ubuntu/.test/webpy")
-
+sys.path.append("./lib/webpy")
 import web
 
 ueconfig_dir = 'static/upload'
