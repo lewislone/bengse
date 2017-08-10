@@ -2,6 +2,8 @@
 import os
 import json
 from config import settings
+sys.path.insert(0,'../utils/webpy')
+#sys.path.insert(0,'/home/ubuntu/.test/webpy')
 import web
 
 web.config.debug = True

@@ -13,6 +13,7 @@ urls = (
      '/',        pre_fix + 'main.Test',
     '/upload',   pre_fix + 'upload_file.UploadFile',
     '/new',  	 pre_fix +'main.New',
+    '/newbatch',  	 pre_fix +'main.NewBatch',
     '/imgs/(.*)',pre_fix + 'main.Imgs',
     '/ue_imageUp', Ue_ImageUp,
     '/ue_fileUp', Ue_FileUp,

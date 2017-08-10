@@ -4,15 +4,26 @@ $def with ()
     <head>
         <meta charset="UTF-8">
         <title>uploadify</title>
-        <script type="text/javascript" src="../static/js/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="../static/js/upload_file.js"></script>
-        <link rel="stylesheet" href="../static/css/uploadify.css">
+        <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="/static/js/upload_file.js"></script>
+        <link rel="stylesheet" href="/static/css/uploadify.css">
     </head>
     <body>
 	<form method="POST" enctype="multipart/form-data" action="">
 	<input type="file" name="file_upload" />
 	<br/>
 	<input type="submit" />
+	</form>
+	<form method="POST" enctype="multipart/form-data" action="">
+	<input type="file" name="file_upload1" />
+	<br/>
+	<input type="submit" />
+	</form>
+	<form action="" method="POST">
+    		$:form.render_css()
+    		<script type="text/javascript">
+        	UE.getEditor('content');
+    		</script>
 	</form>
     </body>
 </html>

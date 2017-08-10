@@ -1,4 +1,10 @@
 # coding: UTF-8
+import sys
+#sys.path.append('/home/ubuntu/.test/')
+sys.path.insert(0,'../utils/webpy')
+#sys.path.insert(0,'/home/ubuntu/.test/webpy')
+#sys.path.append('/home/ubuntu/.test/webpy')
+#sys.path.append('/home/ubuntu/.test/webpy0.37/web')
 import web
 import os
 import DEBUG
@@ -64,10 +70,83 @@ class New:
 		#pass
         #model.new_post(form.d.title, form.d.content)
 		print form.d.title
-		#print form.d.sender
-		#print form.d.receiver
-		#print form.d.content
-		raise web.seeother('/upload')
+		print form.d.sender
+		print form.d.receiver
+		print form.d.content
+		raise web.seeother('/newbatch')
+
+class NewBatch:
+	def __init__(self):
+		self.render = settings.render
+	form = web.form.Form(
+		
+		web.form.File('senderlist', web.form.notnull,
+                         size=30,
+                         description=u'发件人列表'),
+		web.form.File('receiverlist', web.form.notnull,
+                         size=30,
+                         description=u'收件人列表'),
+        web.form.Textbox('title', web.form.notnull,
+                         size=30,
+                         description=u'邮件标题'),
+        web.form.Textarea('content', web.form.notnull,
+                          rows=30, cols=80,
+                          description=u'邮件内容'),
+        web.form.Button(u'发送')
+    )
+	def GET(self):
+		form = self.form()
+		return self.render.new(form)
+	def POST(self):
+		form = self.form()
+		if not form.validates():
+			return self.render.new(form)
+		x = web.input(senderlist={})
+		#FIXME, save path#
+		'''
+        	filedir = '/tmp' # change this to the directory you want to store the file in.
+        	if 'senderlist' in x: # to check if the file-object is created
+            		filepath=x.senderlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            		filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+			try:
+            			fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+            			fout.write(x.senderlist.file.read()) # writes the uploaded file to the newly created file.
+            			fout.close() # closes the file, upload complete.
+            		except Exception, e:
+				traceback.print_exc()
+				json.dumps({'success':0, 'msg':u'文件上传失败！ %s...' % e[1]})
+			else:
+				json.dumps({'success':1, 'msg':u'文件上传成功！'})
+
+		x = web.input(receiverlist={})
+		#FIXME, save path#
+        	filedir = '/tmp' # change this to the directory you want to store the file in.
+        	if 'receiverlist' in x: # to check if the file-object is created
+            		filepath=x.receiverlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            		filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+			try:
+            			fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+            			fout.write(x.receiverlist.file.read()) # writes the uploaded file to the newly created file.
+            			fout.close() # closes the file, upload complete.
+            		except Exception, e:
+				traceback.print_exc()
+				json.dumps({'success':0, 'msg':u'文件上传失败！ %s...' % e[1]})
+			else:
+				json.dumps({'success':1, 'msg':u'文件上传成功！'})
+
+
+	
+		#pass
+        #model.new_post(form.d.title, form.d.content)
+		'''
+		print form.d.title
+		#print form.d.senderlist
+		#print form.d.receiverlist
+		print form.d.content
+		web.debug(x['senderlist'].filename)
+		web.debug(x['senderlist'].value)
+		raise web.seeother('/')
+
 
 class Imgs:
     def GET(self, name):
