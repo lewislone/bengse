@@ -2,6 +2,7 @@
 import utils.loadcvs as loadcvs
 import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite
+import mail.batch_send as batch_send
 
 
 if __name__ == "__main__":
@@ -21,6 +22,9 @@ if __name__ == "__main__":
     #db.fetchall("account")
     #db.fetchone_by_id("account", 1)
     #db.fetchone_by_key_value("account", "account", "a91008950@163.com" )
+
+    batchsend = batch_send.Batchsend()
+    batchsend.run()
 
 '''
     c2s = csv2sqlite.csv2sqlite('./tmp/account.csv')

@@ -61,7 +61,7 @@ class Dao:
         print(statement)
         self.cursor.execute(statement)
 
-    def __total_row(self, table):
+    def total_row(self, table):
         count = 0
         if table is not None and table != '':
             sql = 'select count(*) from %s' % table
@@ -81,7 +81,7 @@ class Dao:
         if sql is not None and sql != '':
             self.cursor.execute(sql)
             re = self.cursor.fetchall()
-            print re
+            print 'fetch: ', len(re)
             return re
 
     def fetchone_by_id(self, table, id):
@@ -195,7 +195,7 @@ class Dao:
 
     def insertone(self, table, new):
         row = {}
-        count = self.__total_row(table)
+        count = self.total_row(table)
         count = count + 1
         row['id'] = str(count)
         row['status'] = '1'

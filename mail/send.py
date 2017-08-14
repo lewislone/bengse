@@ -16,7 +16,7 @@ class Mail():
     def __init__(self, addr, pw, smpt, ip):
         self.from_addr = addr
         self.password = pw
-        self.server = smtplib.SMTP(ip, smtp, 25)
+        self.server = smtplib.SMTP(ip, smpt, 25)
         self.server.set_debuglevel(1)
 
 
@@ -32,12 +32,12 @@ class Mail():
             return e[0]
         return 0
 
-    def send_text(self, to, content, content_type):#content_type: 'html', 'plain'
+    def send_text(self, to, to_name, from_name, content, content_type, subject):#content_type: 'html', 'plain'
         #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
         msg = MIMEText(content, content_type, 'utf-8')
-        msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
-        msg['To'] = self._format_addr('lll <%s>' % to)
-        msg['Subject'] = Header('接冰…', 'utf-8').encode()
+        msg['From'] = self._format_addr('%s <%s>' % (from_name, self.from_addr))
+        msg['To'] = self._format_addr('%s <%s>' % (to_name, to))
+        msg['Subject'] = Header(subject, 'utf-8').encode()
 
         self.server.sendmail(self.from_addr, [to], msg.as_string())
         self.server.quit()

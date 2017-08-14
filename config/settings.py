@@ -85,7 +85,7 @@ c = {
                                 ''',
                         },
                       ],
-        'account_type: {
+        'account_type': {
                             'il.com': {
                                         'smtp': 'smtp.gmail.com',
                                         'max' : 50,
