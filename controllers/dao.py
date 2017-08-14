@@ -12,6 +12,7 @@ account = [
             'min_interval': 20,
             'maxtimepeday': 40,
             'status': 1,                    #0:dead 1:live
+            'last_ip': '192.168.1.1',
             'ip_map': 110001010001000000...,#ip mapping 0:dead 1:live
             },
         ]
@@ -19,6 +20,7 @@ account = [
 receiver = [
             {'email': '3345214321.qq.com',
              'status': 0,                   #0:dead 1:live
+             'last_account': 'xxx@163.com',
              'account_map': 00000101001..., #account mapping 0:dead 1:live
             },
         ]
@@ -123,6 +125,17 @@ class Dao:
             self.cursor.execute(sql)
             self.conn.commit()
 
+    def update_last_by_key_value(self, table, key, value, last):
+        if table is not None and table != '':
+            if table == 'receiver':
+                self.update_by_key_value(table, 'last_account', last, key, value)
+            elif tables == 'account':
+                self.update_by_key_value(table, 'last_ip', last, key, value)
+
+    def update_last_by_id(self, table, id, last):
+        if table is not None and table != '':
+            self.update_last_by_key_value(table, 'ID', id, last)
+
     def update_status_by_key_value(self, table, key, value, status):
         if table is not None and table != '':
             self.update_by_key_value(table, 'status', status, key, value)
@@ -193,15 +206,16 @@ class Dao:
             row['account'] = new['account']
             row['passwd'] = new['passwd']
             row['last_time'] = str(int(time.time()))
+            row['last_ip'] = ''
             tmp = []
             for i in range(256):
                 tmp.append('0')
             row['ip_map'] = ''.join(tmp) 
             com = row['account'][-6:]
-            if com in settings.c['smtp_mapping'].keys():
-                row['smtp'] = settings.c['smtp_mapping'][com]['smtp']
-                row['min_interval'] = str(settings.c['smtp_mapping'][com]['interval'])
-                row['max_times_per_day'] = str(settings.c['smtp_mapping'][com]['max'])
+            if com in settings.c['account_type'].keys():
+                row['smtp'] = settings.c['account_type'][com]['smtp']
+                row['min_interval'] = str(settings.c['account_type'][com]['interval'])
+                row['max_times_per_day'] = str(settings.c['account_type'][com]['max'])
             else:
                 print row['account'], ' can not be config'
                 return
@@ -216,6 +230,7 @@ class Dao:
                 return
             row['email'] = new['email']
             row['last_time'] = str(int(time.time()))
+            row['last_account'] = ''
             tmp = []
             for i in range(1024):
                 tmp.append('0')

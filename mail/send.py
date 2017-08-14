@@ -32,7 +32,7 @@ class Mail():
             return e[0]
         return 0
 
-    def send_text(self, ip, to, content, content_type):#content_type: 'html', 'plain'
+    def send_text(self, to, content, content_type):#content_type: 'html', 'plain'
         #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
         msg = MIMEText(content, content_type, 'utf-8')
         msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
@@ -42,7 +42,7 @@ class Mail():
         self.server.sendmail(self.from_addr, [to], msg.as_string())
         self.server.quit()
 
-    def send_both(self, ip, to, content):
+    def send_both(self, to, content):
 
         msg = MIMEMultipart('alternative')
         msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
@@ -61,7 +61,7 @@ class Mail():
             return e[0]
         return 0
 
-    def send_html_with_attachment(self, ip, to, content, content_type, attachment_path):
+    def send_html_with_attachment(self, to, content, attachment_path):
         msg = MIMEMultipart()
         msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
         msg['To'] = self._format_addr('lll <%s>' % to)
@@ -82,7 +82,7 @@ class Mail():
         msg.attach(mime)
 
         #msg.attach(MIMEText('<html><body><h1>Hi this my photo: </h1>' + '<p><img src="cid:0"></p>' + '</body></html>', 'html', 'utf-8'))
-        msg.attach(MIMEText(content, content_type, 'utf-8'))
+        msg.attach(MIMEText(content, 'html', 'utf-8'))
 
         try:
             self.server.sendmail(self.from_addr, [to], msg.as_string())

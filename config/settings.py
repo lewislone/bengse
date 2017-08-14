@@ -31,7 +31,7 @@ c = {
         'db_name'   : [
                         { 
                          'name': 'account',
-                         'keys': ['id', 'account', 'passwd', 'smtp', 'min_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'reserve1', 'reserve2', 'reserve3'],
+                         'keys': ['id', 'account', 'passwd', 'smtp', 'min_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'last_ip', 'reserve1', 'reserve2', 'reserve3'],
                          'sql' : '''
                                 CREATE TABLE IF NOT EXISTS account (
                                   'id' int(11) NOT NULL,
@@ -43,6 +43,7 @@ c = {
                                   `status` int NOT NULL,
                                   `ip_map` char(256) NOT NULL,
                                   `last_time` int(11) NOT NULL,
+                                  `last_ip` varchar(20)  DEFAULT NULL,
                                   `reserve1` varchar(20) DEFAULT NULL,
                                   `reserve2` varchar(20) DEFAULT NULL,
                                   `reserve3` varchar(20) DEFAULT NULL,
@@ -52,7 +53,7 @@ c = {
                         },
                         {
                          'name': 'receiver',
-                         'keys': ['id', 'email', 'status', 'account_map', 'last_time', 'reserve1', 'reserve2', 'reserve3'],
+                         'keys': ['id', 'email', 'status', 'account_map', 'last_time', 'last_account', 'reserve1', 'reserve2', 'reserve3'],
                          'sql' : '''
                                 CREATE TABLE IF NOT EXISTS receiver (
                                   'id' int(11) NOT NULL,
@@ -60,6 +61,7 @@ c = {
                                   `status` int NOT NULL,
                                   `account_map` char(1024) NOT NULL,
                                   `last_time` int(11) NOT NULL,
+                                  `last_account` varchar(40) DEFAULT NULL,
                                   `reserve1` varchar(20) DEFAULT NULL,
                                   `reserve2` varchar(20) DEFAULT NULL,
                                   `reserve3` varchar(20) DEFAULT NULL,
@@ -73,7 +75,7 @@ c = {
                          'sql' : '''
                                 CREATE TABLE IF NOT EXISTS ip (
                                   'id' int(11) NOT NULL,
-                                  `addr` varchar(40) NOT NULL,
+                                  `addr` varchar(20) NOT NULL,
                                   `status` int NOT NULL,
                                   `reserve1` varchar(20) DEFAULT NULL,
                                   `reserve2` varchar(20) DEFAULT NULL,
@@ -83,7 +85,7 @@ c = {
                                 ''',
                         },
                       ],
-        'smtp_mapping': {
+        'account_type: {
                             'il.com': {
                                         'smtp': 'smtp.gmail.com',
                                         'max' : 50,
