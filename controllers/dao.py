@@ -129,7 +129,7 @@ class Dao:
         if table is not None and table != '':
             if table == 'receiver':
                 self.update_by_key_value(table, 'last_account', last, key, value)
-            elif tables == 'account':
+            elif table == 'account':
                 self.update_by_key_value(table, 'last_ip', last, key, value)
 
     def update_last_by_id(self, table, id, last):
@@ -205,13 +205,17 @@ class Dao:
                 return
             row['account'] = new['account']
             row['passwd'] = new['passwd']
+            com = row['account'][-6:]
+            if com == 'qq.com' and new.has_key('code'):
+                row['code'] = new['code']
+            else:
+                row['code'] = ''
             row['last_time'] = str(int(time.time()))
             row['last_ip'] = ''
             tmp = []
             for i in range(256):
                 tmp.append('0')
             row['ip_map'] = ''.join(tmp) 
-            com = row['account'][-6:]
             if com in settings.c['account_type'].keys():
                 row['smtp'] = settings.c['account_type'][com]['smtp']
                 row['min_interval'] = str(settings.c['account_type'][com]['interval'])

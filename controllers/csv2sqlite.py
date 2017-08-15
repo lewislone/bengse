@@ -45,7 +45,11 @@ class csv2sqlite:
             #print row.keys()
             #print row.values()
             if type is 2: #account
-                new = {row.keys()[0]:row.values()[0], row.keys()[1]:row.values()[1]}
+                #if row.values()[0][-6:] == 'qq.com':
+                if len(row.keys()) > 2:
+                    new = {row.keys()[0]:row.values()[0], row.keys()[1]:row.values()[1], row.keys()[2]:row.values()[2]}
+                else:
+                    new = {row.keys()[0]:row.values()[0], row.keys()[1]:row.values()[1]}
                 self.db.insertone('account', new)
             if type is 1: #receiver
                 new = {row.keys()[0]:row.values()[0]}

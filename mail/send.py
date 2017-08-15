@@ -13,14 +13,16 @@ import utils.test as test
 
 
 class Mail():
-    def __init__(self, addr, pw, smpt, ip):
+    def __init__(self, addr, pw, smpt, ip, port=25):
         self.from_addr = addr
         self.password = pw
-        self.server = smtplib.SMTP(ip, smpt, 25)
+        self.server = smtplib.SMTP(ip, smpt, port)
+        if port != 25:
+           self.server.starttls()
         self.server.set_debuglevel(1)
 
 
-    def _format_addr(self, s):
+    def __format_addr(self, s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
 
@@ -32,11 +34,10 @@ class Mail():
             return e[0]
         return 0
 
-    def send_text(self, to, to_name, from_name, content, content_type, subject):#content_type: 'html', 'plain'
-        #msg.attach(MIMEText('<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>', 'html', 'utf-8'))
+    def send_text(self, to, to_name, from_name, content, content_type, subject):
         msg = MIMEText(content, content_type, 'utf-8')
-        msg['From'] = self._format_addr('%s <%s>' % (from_name, self.from_addr))
-        msg['To'] = self._format_addr('%s <%s>' % (to_name, to))
+        msg['From'] = self.__format_addr('%s <%s>' % (from_name, self.from_addr))
+        msg['To'] = self.__format_addr('%s <%s>' % (to_name, to))
         msg['Subject'] = Header(subject, 'utf-8').encode()
 
         self.server.sendmail(self.from_addr, [to], msg.as_string())
@@ -45,8 +46,8 @@ class Mail():
     def send_both(self, to, content):
 
         msg = MIMEMultipart('alternative')
-        msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
-        msg['To'] = self._format_addr('lll <%s>' % to)
+        msg['From'] = self.__format_addr('fri <%s>' % self.from_addr)
+        msg['To'] = self.__format_addr('lll <%s>' % to)
         msg['Subject'] = Header('谢谢……', 'utf-8').encode()
 
         msg.attach(MIMEText(content, 'plain', 'utf-8'))
@@ -63,8 +64,8 @@ class Mail():
 
     def send_html_with_attachment(self, to, content, attachment_path):
         msg = MIMEMultipart()
-        msg['From'] = self._format_addr('fri <%s>' % self.from_addr)
-        msg['To'] = self._format_addr('lll <%s>' % to)
+        msg['From'] = self.__format_addr('fri <%s>' % self.from_addr)
+        msg['To'] = self.__format_addr('lll <%s>' % to)
         msg['Subject'] = Header('接冰……', 'utf-8').encode()
 
         f = open(attachment_path, 'rb')

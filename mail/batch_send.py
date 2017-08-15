@@ -26,15 +26,18 @@ class Batchsend:
         ip = self.db.fetchone_by_id('ip', id) 
         return ip[0]
 
-    def sent_mail(self, ip, receiver, account):
+    def sent_mail(self, ip, receiver, account, port):
         print receiver
         addr = account[1]
-        pw = account[2]
+        if addr[-6:] == 'qq.com' and account[10] != '':
+            pw = account[10]
+        else:
+            pw = account[2]
         smpt = account[3]
         if account[9]:
-            mail = send.Mail(addr, pw, smpt, account[9])
+            mail = send.Mail(addr, pw, smpt, account[9], port) #use last_ip
         else:
-            mail = send.Mail(addr, pw, smpt, ip[1])
+            mail = send.Mail(addr, pw, smpt, ip[1], port)
             self.db.update_last_by_key_value('account', 'account', addr, ip)
         mail.loginsmtp()
         content = self.__get_contain()
@@ -70,7 +73,7 @@ class Batchsend:
                     print 'receiver: ', receiver
                     ip = self.__get_ip(ip_indexs[i%len(ip_indexs)])
                     print 'ip: ', ip
-                    self.sent_mail(ip, receiver, accounts[i])
+                    self.sent_mail(ip, receiver, accounts[i], type['port'])
                     break
                 break
             break

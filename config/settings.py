@@ -31,7 +31,7 @@ c = {
         'db_name'   : [
                         { 
                          'name': 'account',
-                         'keys': ['id', 'account', 'passwd', 'smtp', 'min_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'last_ip', 'reserve1', 'reserve2', 'reserve3'],
+                         'keys': ['id', 'account', 'passwd', 'smtp', 'min_interval', 'max_times_per_day', 'status', 'ip_map', 'last_time', 'last_ip', 'code', 'reserve1', 'reserve2', 'reserve3'],
                          'sql' : '''
                                 CREATE TABLE IF NOT EXISTS account (
                                   'id' int(11) NOT NULL,
@@ -44,6 +44,7 @@ c = {
                                   `ip_map` char(256) NOT NULL,
                                   `last_time` int(11) NOT NULL,
                                   `last_ip` varchar(20)  DEFAULT NULL,
+                                  `code` varchar(20) DEFAULT NULL,
                                   `reserve1` varchar(20) DEFAULT NULL,
                                   `reserve2` varchar(20) DEFAULT NULL,
                                   `reserve3` varchar(20) DEFAULT NULL,
@@ -90,61 +91,73 @@ c = {
                                         'smtp': 'smtp.gmail.com',
                                         'max' : 50,
                                         'interval' : 100,
+                                        'port': 587,
                                     },
                             'qq.com': {
                                         'smtp': 'smtp.qq.com',
                                         'max' : 50,
                                         'interval' : 100,
+                                        'port': 587,
                                     },
                             'mx.com': {
                                         'smtp': 'smtp.gmx.com',
                                         'max' : 100,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             'ab.com': {
                                         'smtp': 'smtp.gawab.com',
                                         'max' : 100,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             '63.com': {
                                         'smtp': 'smtp.163.com',
                                         'max' : 50,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             '26.com': {
                                         'smtp': 'smtp.126.com',
                                         'max' : 50,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             'ah.com': {
                                         'smtp': 'smtp.yeah.com',
                                         'max' : 50,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             'ol.com': {
                                         'smtp': 'smtp.aol.com',
                                         'max' : 100,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             'hu.com': {
                                         'smtp': 'smtp.sohu.com',
                                         'max' : 100,
                                         'interval' : 200,
+                                        'port': 25,
                                     },
                             '39.com': {
                                         'smtp': 'smtp.139.com',
                                         'max' : 100,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                             'na.com': {
                                         'smtp': 'smtp.sina.com',
                                         'max' : 30,
                                         'interval' : 200,
+                                        'port': 25,
                                     },
                             've.com': {
                                         'smtp': 'smtp.live.com',
                                         'max' : 100,
                                         'interval' : 100,
+                                        'port': 25,
                                     },
                         }
     }
