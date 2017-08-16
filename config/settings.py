@@ -1,11 +1,7 @@
 # coding: UTF-8
 import os
 import sys
-#sys.path.append('/home/ubuntu/.test/')
 sys.path.insert(0,'../utils/webpy')
-#sys.path.insert(0,'/home/ubuntu/.test/webpy')
-#sys.path.append('/home/ubuntu/.test/webpy')
-#sys.path.append('/home/ubuntu/.test/webpy0.37/web')
 import web
 
 app_root = os.path.dirname(__file__)

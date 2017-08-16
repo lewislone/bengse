@@ -7,6 +7,7 @@ import DEBUG
 
 from config import settings
 import mail.send as send
+import controllers.csv2sqlite as csv2sqlite
 
 class Test:
     def __init__(self):
@@ -98,52 +99,42 @@ class NewBatch:
         if not self.form.validates():
             return self.render.newbatch(self.form)
         x = web.input(senderlist={})
-        #FIXME, save path#
-        '''
-            filedir = '/tmp' # change this to the directory you want to store the file in.
-            if 'senderlist' in x: # to check if the file-object is created
-                    filepath=x.senderlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
-                    filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
-            try:
-                        fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
-                        fout.write(x.senderlist.file.read()) # writes the uploaded file to the newly created file.
-                        fout.close() # closes the file, upload complete.
-                    except Exception, e:
-                traceback.print_exc()
-                json.dumps({'success':0, 'msg':u'文件上传失败！ %s...' % e[1]})
-            else:
-                json.dumps({'success':1, 'msg':u'文件上传成功！'})
+        #FIXME, save path, OK ?#
+        filedir = '/tmp' # change this to the directory you want to store the file in.
+        if 'senderlist' in x: # to check if the file-object is created
+            filepath=x.senderlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+            #try:
+            fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+            fout.write(x.senderlist.file.read()) # writes the uploaded file to the newly created file.
+            fout.close() # closes the file, upload complete.
 
-        x = web.input(receiverlist={})
-        #FIXME, save path#
-            filedir = '/tmp' # change this to the directory you want to store the file in.
-            if 'receiverlist' in x: # to check if the file-object is created
-                    filepath=x.receiverlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
-                    filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
-            try:
-                        fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
-                        fout.write(x.receiverlist.file.read()) # writes the uploaded file to the newly created file.
-                        fout.close() # closes the file, upload complete.
-                    except Exception, e:
-                traceback.print_exc()
-                json.dumps({'success':0, 'msg':u'文件上传失败！ %s...' % e[1]})
-            else:
-                json.dumps({'success':1, 'msg':u'文件上传成功！'})
-
-
-
-        #pass
-        #model.new_post(form.d.title, form.d.content)
-        '''
-        print self.form.d.title
-        #print form.d.senderlist
-        #print form.d.receiverlist
-        print self.form.d.content
         web.debug(x['senderlist'].filename)
         web.debug(x['senderlist'].value)
+        x = web.input(receiverlist={})
+        if 'receiverlist' in x: # to check if the file-object is created
+            filepath=x.receiverlist.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+            #try:
+            fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+            fout.write(x.receiverlist.file.read()) # writes the uploaded file to the newly created file.
+            fout.close() # closes the file, upload complete.
+
+        print self.form.d.title
+        print self.form.d.content
+        web.debug(x['receiverlist'].filename)
+        web.debug(x['receiverlist'].value)
+        '''
+        FIMXE, if upload ok, then /tmp/account.csv and /tmp/receiver.csv exits and not empty
+        '''
+        c2s = csv2sqlite.csv2sqlite('./tmp/account.csv')
+        c2s.csv2db(2)
+        c2s.close_db()
+        c2s = csv2sqlite.csv2sqlite('./tmp/receiver.csv')
+        c2s.csv2db(1)
+        c2s.close_db()
+
         raise web.seeother('/')
-
-
 class Imgs:
     def GET(self, name):
         ext = name.split(".")[-1]
