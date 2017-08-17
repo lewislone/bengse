@@ -126,7 +126,6 @@ class NewBatch:
         web.debug(x['receiverlist'].value)
         '''
         FIMXE, if upload ok, then /tmp/account.csv and /tmp/receiver.csv exits and not empty
-        '''
         c2s = csv2sqlite.csv2sqlite('./tmp/account.csv')
         c2s.csv2db(2)
         c2s.close_db()
@@ -134,6 +133,7 @@ class NewBatch:
         c2s.csv2db(1)
         c2s.close_db()
 
+        '''
         raise web.seeother('/')
 class Imgs:
     def GET(self, name):
@@ -150,4 +150,10 @@ class Imgs:
         else:
             raise web.notfound()
 
+class StopSend:
+    def __init__(self):
+        self.render = settings.render
+    def GET(self):
+        return self.render.stop()
 
+ 
