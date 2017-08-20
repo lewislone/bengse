@@ -9,7 +9,7 @@ from email.mime.audio import MIMEAudio
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.utils import parseaddr, formataddr
-import utils.test as test
+from config import settings
 
 
 class Mail():
@@ -19,7 +19,7 @@ class Mail():
         self.server = smtplib.SMTP(ip, smpt, port)
         if port != 25:
            self.server.starttls()
-        self.server.set_debuglevel(1)
+        self.server.set_debuglevel(settings.c['debuglevel'])
 
 
     def __format_addr(self, s):
@@ -40,8 +40,12 @@ class Mail():
         msg['To'] = self.__format_addr('%s <%s>' % (to_name, to))
         msg['Subject'] = Header(subject, 'utf-8').encode()
 
-        self.server.sendmail(self.from_addr, [to], msg.as_string())
-        self.server.quit()
+        try:
+            self.server.sendmail(self.from_addr, [to], msg.as_string())
+        except smtplib.SMTPException, e:
+            print e
+            return e[0]
+        return 0
 
     def send_both(self, to, content):
 
@@ -108,4 +112,3 @@ if __name__ == '__main__':
     #send_plain()
     #send_both(bindipobj.ip)
     #send_html_with_attachment()
-    test.func_test(22)

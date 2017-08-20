@@ -23,6 +23,7 @@ web.template.Template.globals['render'] = render
 
 c = {
         'debug'     : True,
+        'debuglevel': 1,
         'db_url'    : './tmp/main.db',
         'db_name'   : [
                         { 
@@ -78,6 +79,66 @@ c = {
                                   `reserve2` varchar(20) DEFAULT NULL,
                                   `reserve3` varchar(20) DEFAULT NULL,
                                    PRIMARY KEY (`addr`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'names',
+                         'keys': ['id', 'name', 'status', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS names (
+                                  'id' int(11) NOT NULL,
+                                  `name` varchar(40) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`name`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'subjects',
+                         'keys': ['id', 'subject', 'status', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS subjects (
+                                  'id' int(11) NOT NULL,
+                                  `subject` varchar(128) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`subject`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'randoms',
+                         'keys': ['id', 'random', 'status', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS randoms (
+                                  'id' int(11) NOT NULL,
+                                  `random` varchar(40) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`random`)
+                                )
+                                ''',
+                        },
+                        {
+                         'name': 'quotes',
+                         'keys': ['id', 'quote', 'status', 'reserve1', 'reserve2', 'reserve3'],
+                         'sql' : '''
+                                CREATE TABLE IF NOT EXISTS quotes (
+                                  'id' int(11) NOT NULL,
+                                  `quote` varchar(1024) NOT NULL,
+                                  `status` int NOT NULL,
+                                  `reserve1` varchar(20) DEFAULT NULL,
+                                  `reserve2` varchar(20) DEFAULT NULL,
+                                  `reserve3` varchar(20) DEFAULT NULL,
+                                   PRIMARY KEY (`quote`)
                                 )
                                 ''',
                         },

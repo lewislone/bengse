@@ -31,6 +31,33 @@ ip = [
             'status':0,
         },
     ]
+
+subjects = [
+        {
+            'id':0,
+            'subject':'你好',
+        },
+    ]
+
+names = [
+        {
+            'id':0,
+            'name':'lewis',
+        },
+    ]
+quotes = [
+        {
+            'id':0,
+            'quote':'沉默较之言不由衷的话更有益于社交。--- 蒙 田',
+        },
+    ]
+randoms = [
+        {
+            'id':0,
+            'random':'西瓜',
+        },
+    ]
+
 '''
 
 
@@ -187,6 +214,14 @@ class Dao:
                 key = 'addr'
             elif table is "receiver":
                 key = 'email'
+            elif table is "names":
+                key = 'name'
+            elif table is "subjects":
+                key = 'subject'
+            elif table is "randoms":
+                key = 'random'
+            elif table is "quotes":
+                key = 'quote'
             else:
                 print "table %s is not exist"%table
                 return
@@ -239,6 +274,26 @@ class Dao:
             for i in range(1024):
                 tmp.append('0')
             row['account_map'] = ''.join(tmp)
+        elif table is "names":
+            if self.find_by_primary_key(table, new['name']) > 0:
+                print 'name: %s exist'%new['name']
+                return
+            row['name'] = new['name']
+        elif table is "subjects":
+            if self.find_by_primary_key(table, new['subject']) > 0:
+                print 'subject: %s exist'%new['subject']
+                return
+            row['subject'] = new['subject']
+        elif table is "randoms":
+            if self.find_by_primary_key(table, new['random']) > 0:
+                print 'random: %s exist'%new['random']
+                return
+            row['random'] = new['random']
+        elif table is "quotes":
+            if self.find_by_primary_key(table, new['quote']) > 0:
+                print 'quote: %s exist'%new['quote']
+                return
+            row['quote'] = new['quote']
         else:
             print "table %s is not exist"%table
             return
@@ -249,8 +304,11 @@ class Dao:
         tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
         sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
         print sql
-        self.cursor.execute(sql)
-        self.conn.commit()
+        try:
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except:
+            print 'insert failed' 
 
     def execute_script(self, sqlscript):
         return self.cursor.executescript(sqlscript)
@@ -270,7 +328,11 @@ class Dao:
 
     def init_tables(self):
         for i in range(len(settings.c['db_name'])):
-            self.cursor.execute(settings.c['db_name'][i]['sql'])
+            print settings.c['db_name'][i]['sql']
+            try:
+                self.cursor.execute(settings.c['db_name'][i]['sql'])
+            except:
+                print 'init db: %s failed'%settings.c['db_name'][i]['sql']
 
         self.conn.commit()
 

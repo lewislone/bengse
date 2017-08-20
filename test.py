@@ -1,9 +1,12 @@
 # coding: UTF-8
-import utils.loadcvs as loadcvs
+import os
+import utils.loadjson as loadjson
 import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import mail.send as send
+from config import settings
+import DEBUG
 
 def sendtest():
     content = u'<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1><br>---</br><p>send by <a href="http://www.python.org">suninrain</a>...</p></body></html>'
@@ -23,15 +26,35 @@ def initDB():
     c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
     c2s.csv2db(0)
     c2s.close_db()
+    c2s = csv2sqlite.csv2sqlite('./tmp/name.csv')
+    c2s.csv2db(3)
+    c2s.close_db()
+    c2s = csv2sqlite.csv2sqlite('./tmp/subject.csv')
+    c2s.csv2db(4)
+    c2s.close_db()
+    c2s = csv2sqlite.csv2sqlite('./tmp/quote.csv')
+    c2s.csv2db(6)
+    c2s.close_db()
 
 def batchsend():
     batchsend = batch_send.Batchsend()
     batchsend.run()
 
+def loadjsonfile():
+    data = settings.c['db_name'][0]
+    loadjson.loadtojson(data, os.getcwd() + u"/tmp/test.json")
+    d = loadjson.loadfromjson(os.getcwd() + u"/tmp/test.json")
+    print d['name']
+    DEBUG.pd(d)
+
+def template():
+    with open('./templates/temp1.htm') as f:
+        contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
+        fromname = u'lewis'
+        print f.read()%(contain, '名人名言', 'www.lll.com', fromname)
+
 if __name__ == "__main__":
  
-    #loadcvs.loadtojson(os.getcwd() + u"/邮箱.cvs")
-
     #db = dao.Dao()
     #db.init_tables()
     #new = {'account':'a91008950@163.com', 'passwd':'aa777888'}
@@ -51,3 +74,7 @@ if __name__ == "__main__":
     #batchsend()
 
     #sendtest()
+
+    #loadjsonfile()
+
+    #template()

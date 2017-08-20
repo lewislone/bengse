@@ -44,6 +44,18 @@ class csv2sqlite:
         for row in self.__readFile():
             #print row.keys()
             #print row.values()
+            if type is 6: #quotes
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('quotess', new)
+            if type is 5: #randoms
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('randoms', new)
+            if type is 4: #subjects
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('subjects', new)
+            if type is 3: #names
+                new = {row.keys()[0]:row.values()[0]}
+                self.db.insertone('names', new)
             if type is 2: #account
                 #if row.values()[0][-6:] == 'qq.com':
                 if len(row.keys()) > 2:
