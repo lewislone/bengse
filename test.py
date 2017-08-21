@@ -5,6 +5,7 @@ import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import mail.send as send
+import mail.template as template 
 from config import settings
 import DEBUG
 
@@ -29,7 +30,7 @@ def initDB():
     c2s = csv2sqlite.csv2sqlite('./tmp/name.csv')
     c2s.csv2db(3)
     c2s.close_db()
-    c2s = csv2sqlite.csv2sqlite('./tmp/subject.csv')
+    c2s = csv2sqlite.csv2sqlite('./tmp/subject.txt')
     c2s.csv2db(4)
     c2s.close_db()
     c2s = csv2sqlite.csv2sqlite('./tmp/quote.csv')
@@ -47,11 +48,15 @@ def loadjsonfile():
     print d['name']
     DEBUG.pd(d)
 
-def template():
+def temp():
     with open('./templates/temp1.htm') as f:
         contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
         fromname = u'lewis'
-        print f.read()%(contain, '名人名言', 'www.lll.com', fromname)
+        print f.read()%(contain, u'名人名言', u'www.lll.com', fromname)
+    temp = template.Template('./templates/temp1.htm')
+    temp.get_quote()
+    temp.get_toname()
+    temp.get_subject()
 
 if __name__ == "__main__":
  
@@ -69,7 +74,7 @@ if __name__ == "__main__":
     #db.fetchone_by_id("account", 1)
     #db.fetchone_by_key_value("account", "account", "a91008950@163.com" )
 
-    initDB()
+    #initDB()
 
     #batchsend()
 
@@ -77,4 +82,4 @@ if __name__ == "__main__":
 
     #loadjsonfile()
 
-    #template()
+    temp()

@@ -46,12 +46,13 @@ class csv2sqlite:
             #print row.values()
             if type is 6: #quotes
                 new = {row.keys()[0]:row.values()[0]}
-                self.db.insertone('quotess', new)
+                self.db.insertone('quotes', new)
             if type is 5: #randoms
                 new = {row.keys()[0]:row.values()[0]}
                 self.db.insertone('randoms', new)
             if type is 4: #subjects
-                new = {row.keys()[0]:row.values()[0]}
+                #new = {row.keys()[0]:row.values()[0]}
+                new = {'subject':row.values()[0]}
                 self.db.insertone('subjects', new)
             if type is 3: #names
                 new = {row.keys()[0]:row.values()[0]}

@@ -96,6 +96,14 @@ class Dao:
             re = self.cursor.fetchone() 
         return re[0] 
 
+    def get_random(self, table):
+        if table is not None and table != '':
+            sql = 'select * from %s order by random() limit 1' % table
+            #sql = 'SELECT * FROM %s ORDER BY RANDOM() limit 1' % table
+            self.cursor.execute(sql)
+            re = self.cursor.fetchall()
+            return re
+
     def fetchall(self, table):
         if table is not None and table != '':
             sql = 'select * from %s' % table
