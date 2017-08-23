@@ -14,7 +14,7 @@ class Batchsend:
     def __init__(self):
         self.db = dao.Dao()
         self.db.init_tables()
-        self.temp  = template.Template()
+        self.temp  = template.Template('./templates/temp1.htm')
         jsonfile = os.getcwd() + u"/tmp/status.json"
         if os.path.exists(jsonfile):
             self.status = loadjson.loadfromjson(os.getcwd() + u"/tmp/status.json")
@@ -38,7 +38,6 @@ class Batchsend:
 
     def __get_reciver(self, rcv_index):
         receiver = self.db.fetchone_by_id('receiver', rcv_index)
-        DEBUG.pd(receiver)
         return receiver[0]
 
     def __get_account(self, smtp):
@@ -50,7 +49,7 @@ class Batchsend:
         return ip[0]
 
     def __update_status(self, type, key, code):
-        if type != 'account' or type != 'receiver' or type != 'ip':
+        if type != 'accounts' or type != 'receivers' or type != 'ip':
             print 'unknown type'
             return
         if key not in self.status[type].keys():
@@ -66,13 +65,14 @@ class Batchsend:
 
     def sent_mail(self, ip, receiver, account, account_type):
         addr = account[1]
-        if 'count' in self.status['account'][addr].keys():
-            if self.status['account'][addr]['count'] >= account_type['max']:
+        if addr in self.status['accounts'].keys() and 'count' in self.status['accounts'][addr].keys():
+            if self.status['accounts'][addr]['count'] >= account_type['max']:
                 return
         if addr[-6:] == 'qq.com' and account[10] != '':
             pw = account[10]
         else:
             pw = account[2]
+        print 'passwd: ', pw
         smpt = account[3]
         if account[9]:
             mail = send.Mail(addr, pw, smpt, account[9], account_type['port']) #use last_ip
@@ -80,7 +80,7 @@ class Batchsend:
             mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
             self.db.update_last_by_key_value('account', 'account', addr, ip)
         ret = mail.loginsmtp()
-        self.__update_status('account', addr, ret)
+        self.__update_status('accounts', addr, ret)
         if ret:
             print 'login smtp failed!!!  %d'%ret
             mail.quit()
@@ -91,7 +91,7 @@ class Batchsend:
         fromname = self.__get_fromname()
         #mail.send_html_with_attachment(receiver, content, attachment_path):
         ret = mail.send_text(receiver[1], toname, fromname, content, 'html', subject)
-        self.__update_status('receiver', receiver[1], ret)
+        self.__update_status('receivers', receiver[1], ret)
         if ret:
             print 'send email failed!!!  %d'%ret
         mail.quit()
@@ -122,7 +122,10 @@ class Batchsend:
                 account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
                 receiver = self.__get_reciver(rcv_index)
                 ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
-                print 'receiver: ', receiver
+                print 'account: '
+                DEBUG.pd(account)
+                print 'receiver: '
+                DEBUG.pd(receiver)
                 print 'ip: ', ip
                 self.sent_mail(ip, receiver, account, account_type)
                 if last_account == account[1]:
