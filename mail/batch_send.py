@@ -25,7 +25,7 @@ class Batchsend:
             self.status['ip'] = {}
 
     def __get_contain(self):
-        return self.temp.get_contain()
+        return self.temp.get_html()
 
     def __get_subject(self):
         return self.temp.get_subject()
