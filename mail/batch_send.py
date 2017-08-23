@@ -1,8 +1,10 @@
 # coding: UTF-8
 import os
+import time
 import DEBUG
 import send
 import random
+from random import choice
 from config import settings
 import controllers.dao as dao
 import utils.loadjson as loadjson
@@ -55,22 +57,27 @@ class Batchsend:
             self.status[type][key] = {}
             self.status[type][key]['ok'] = 0
             self.status[type][key]['failed'] = 0
+            self.status[type][key]['count'] = 0
         if code:
             self.status[type][key]['failed'] += 1
         else:
             self.status[type][key]['ok'] += 1
+        self.status[type][key]['count'] += 1
 
-    def sent_mail(self, ip, receiver, account, port):
+    def sent_mail(self, ip, receiver, account, account_type):
         addr = account[1]
+        if 'count' in self.status['account'][addr].keys():
+            if self.status['account'][addr]['count'] >= account_type['max']:
+                return
         if addr[-6:] == 'qq.com' and account[10] != '':
             pw = account[10]
         else:
             pw = account[2]
         smpt = account[3]
         if account[9]:
-            mail = send.Mail(addr, pw, smpt, account[9], port) #use last_ip
+            mail = send.Mail(addr, pw, smpt, account[9], account_type['port']) #use last_ip
         else:
-            mail = send.Mail(addr, pw, smpt, ip[1], port)
+            mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
             self.db.update_last_by_key_value('account', 'account', addr, ip)
         ret = mail.loginsmtp()
         self.__update_status('account', addr, ret)
@@ -89,6 +96,13 @@ class Batchsend:
             print 'send email failed!!!  %d'%ret
         mail.quit()
 
+    def __random_get_index(self, max):
+        return choice(range(max))
+
+    def __get_a_account(self, accounts):
+        index = self.__random_get_index(len(accounts))
+        return accounts[index]
+
     def run(self):
         #init
         print 'total ip row: ', self.db.total_row('ip')
@@ -98,22 +112,22 @@ class Batchsend:
         random.shuffle(rcv_indexs)
         ip_indexs = range(self.db.total_row('ip'))
         random.shuffle(ip_indexs)
-        print rcv_indexs, ip_indexs
 
-        for (key, type) in settings.c['account_type'].items():
-            accounts = self.__get_account(type['smtp'])
+        for (key, account_type) in settings.c['account_type'].items(): #list all account type one by one
+            accounts = self.__get_account(account_type['smtp'])
             if len(accounts) == 0:
                 continue
-            acu_indexs = range(len(accounts))
-            random.shuffle(acu_indexs)
-            for i in acu_indexs:
-                for rcv_index in rcv_indexs:
-                    receiver = self.__get_reciver(rcv_index)
-                    print 'receiver: ', receiver
-                    ip = self.__get_ip(ip_indexs[i%len(ip_indexs)])
-                    print 'ip: ', ip
-                    self.sent_mail(ip, receiver, accounts[i], type['port'])
-                    break
+            last_account = ''
+            for rcv_index in rcv_indexs: #random get a receiver
+                account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
+                receiver = self.__get_reciver(rcv_index)
+                ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
+                print 'receiver: ', receiver
+                print 'ip: ', ip
+                self.sent_mail(ip, receiver, account, account_type)
+                if last_account == account[1]:
+                    time.sleep(account_type['interval']*2/1000.0)
+                last_account = account[1]
                 break
             break
 
