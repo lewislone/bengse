@@ -40,9 +40,11 @@ class Template:
     def get_html(self):
         temp = self.__get_temp()
         print temp
-        contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
+        name = self.get_fromname()
+        contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
         fromname = self.get_fromname()
-        return temp%(contain, '名人名言', 'www.lll.com', fromname)
+        quote = self.get_quote()
+        return temp%(contain, quote, u'www.lll.com', fromname)
 
 if __name__ == '__main__':
     temp = Template()
