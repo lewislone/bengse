@@ -18,11 +18,11 @@ class Show:
         self.db = dao.Dao()
         self.db.init_tables()
         self.datas = {}
-        self.datas['account'] = ["xxx@163.com, 12345", "xxx@126.com, 12345", "xxx@qq.com, 12345"]
-        self.datas['receiver'] = ["123@qq.com", '3143431@qq.com', '1243827@qq.com']
-        self.datas['name'] = ['lewis', 'lll', 'lone366200']
-        self.datas['title'] = ['hello', 'thanks', 'hi']
-        self.datas['quote'] = ['xxooxooo', 'xxooxoooxoo']
+        self.datas['account'] = self.db.get_all_account() 
+        self.datas['receiver'] = self.db.get_all_receiver()
+        self.datas['name'] = self.db.get_all_name()
+        self.datas['title'] = self.db.get_all_title()
+        self.datas['quote'] = self.db.get_all_quote()
         self.tmpfiledir = '/tmp'
 
     def __store_file(self, field_storage, filename):
@@ -52,50 +52,62 @@ class Show:
             print "add account: ", data['account'], "passwd: ", data['passwd'], "idcode: ", data['idcode']
             if data['account'] and (data['passwd'] or data['idcode']):
                 self.db.insertone('account', {'account':data['account'], 'passwd':data['passwd'], 'idcode':data['idcode']})
+                self.datas['account'].append(data['account']+', '+data['passwd']+', '+data['idcode'])
         if "addreceiver" in data:
             print "add receiver: ", data['receiver']
             self.db.insertone('receiver', {'email':data['receiver']})
+            self.datas['receiver'].append(data['receiver'])
         if "addname" in data:
             print "add name: ", data['name']
             self.db.insertone('names', {'name':data['name']})
+            self.datas['name'].append(data['name'])
         if "addtitle" in data:
             print "add title: ", data['title']
             self.db.insertone('subjects', {'subject':data['title']})
+            self.datas['title'].append(data['title'])
         if "addquote" in data:
             print "add quote: ", data['quote']
             self.db.insertone('quotes', {'quote':data['quote']})
+            self.datas['quote'].append(data['quote'])
         if "addrandom" in data:
             print "add random: ", data['random']
             self.db.insertone('randoms', {'random':data['random']})
+            self.datas['random'].append(data['random'])
         if "addip" in data:
             print "add ip: ", data['ip']
             self.db.insertone('ip', {'addr':data['ip']})
+            self.datas['ip'].append(data['ip'])
 
         if 'accountlist' in data and data.accountlist.filename:
             print 'in accountlist'
             self.__store_file(data.accountlist, 'account.csv')
             if self.__to_db(2, self.tmpfiledir + '/account.csv'):
                 shutil.move(self.tmpfiledir + '/account.csv', './tmp/account.csv.'+time.asctime())
+                self.datas['account'] = self.db.get_all_account() 
         if 'receiverlist' in data and data.receiverlist.filename:
             print 'in receiverlist'
             self.__store_file(data.receiverlist, 'receiver.csv')
             if self.__to_db(1, self.tmpfiledir + '/receiver.csv'):
                 shutil.move(self.tmpfiledir + '/receiver.csv', './tmp/receiver.csv.'+time.asctime())
+                self.datas['receiver'] = self.db.get_all_receiver() 
         if 'quotelist' in data and data.quotelist.filename:
             print 'in quotelist'
             self.__store_file(data.quotelist, 'quote.csv')
             if self.__to_db(6, self.tmpfiledir + '/quote.csv'):
                 shutil.move(self.tmpfiledir + '/quote.csv', './tmp/quote.csv.'+time.asctime())
+                self.datas['quote'] = self.db.get_all_quote()
         if 'namelist' in data and data.namelist.filename:
             print 'in namelist'
             self.__store_file(data.namelist, 'name.csv')
             if self.__to_db(3, self.tmpfiledir + '/name.csv'):
                 shutil.move(self.tmpfiledir + '/name.csv', './tmp/name.csv.'+time.asctime())
+                self.datas['name'] = self.db.get_all_name()
         if 'titlelist' in data and data.titlelist.filename:
             print 'in titlelist'
             self.__store_file(data.titlelist, 'title.csv')
             if self.__to_db(4, self.tmpfiledir + '/title.csv'):
                 shutil.move(self.tmpfiledir + '/title.csv', './tmp/title.csv.'+time.asctime())
+                self.datas['title'] = self.db.get_all_title()
 
         return self.render.show(self.datas)
 
@@ -121,10 +133,8 @@ class New:
         print self.form.d.title
         print self.form.d.content
         temp = template.Template('./templates/temp1.htm')
-        print temp.get_quote()
-        print temp.get_toname()
-        print temp.get_subject()
-        print temp.get_html(self.form.d.content)
+        batchsend = batch_send.Batchsend(self.form.d.title, self.form.d.content)
+        batchsend.run()
         raise web.seeother('/new')
 
 class NewBatch:

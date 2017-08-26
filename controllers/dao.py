@@ -318,6 +318,46 @@ class Dao:
         except:
             print 'insert failed' 
 
+    def get_all_account(self):
+        all = self.fetchall("account")
+        ret = []
+        for account in all:
+            if account[1][-6:] == 'qq.com':
+                ret.append(account[1]+', '+account[10])
+            else:
+                ret.append(account[1]+', '+account[2])
+        return ret
+
+    def get_all_receiver(self):
+        all = self.fetchall("receiver")
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_all_ip(self):
+        all = self.fetchall("ip")
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_all_name(self):
+        all = self.fetchall("names")
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_all_quote(self):
+        all = self.fetchall("quotes")
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_all_title(self):
+        all = self.fetchall("subjects")
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_all_random(self):
+        all = self.fetchall("randoms")
+        ret = [item[1] for item in all]
+        return ret
+
     def execute_script(self, sqlscript):
         return self.cursor.executescript(sqlscript)
 

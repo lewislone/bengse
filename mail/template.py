@@ -37,12 +37,13 @@ class Template:
         DEBUG.pd(name)
         return name[0][1]
 
-    def get_html(self, contain, homeurl=u'wwww.python.com'):
+    def get_html(self, contain):
         temp = self.__get_temp()
         print temp
         name = self.get_fromname()
         #contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
         fromname = self.get_fromname()
+        homeurl=u'wwww.%s.com'%fromname
         quote = self.get_quote()
         return temp%(contain, quote, homeurl, fromname)
 

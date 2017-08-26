@@ -11,9 +11,11 @@ import utils.loadjson as loadjson
 import template
 
 class Batchsend:
-    def __init__(self):
+    def __init__(self, title=' ', content=' '):
         self.db = dao.Dao()
         self.db.init_tables()
+        self.content = content
+        self.title = title
         self.temp  = template.Template('./templates/temp1.htm')
         jsonfile = os.getcwd() + u"/tmp/status.json"
         if os.path.exists(jsonfile):
@@ -25,7 +27,7 @@ class Batchsend:
             self.status['ip'] = {}
 
     def __get_contain(self):
-        return self.temp.get_html()
+        return self.temp.get_html(self.content)
 
     def __get_subject(self):
         return self.temp.get_subject()
@@ -86,7 +88,7 @@ class Batchsend:
             mail.quit()
             return
         content = self.__get_contain()
-        subject = self.__get_subject()
+        subject = self.title+' '+self.__get_subject()
         toname = self.__get_toname()
         fromname = self.__get_fromname()
         #mail.send_html_with_attachment(receiver, content, attachment_path):
@@ -103,7 +105,7 @@ class Batchsend:
         index = self.__random_get_index(len(accounts))
         return accounts[index]
 
-    def run(self):
+    def run(self, content):
         #init
         print 'total ip row: ', self.db.total_row('ip')
         print 'total accounts row: ', self.db.total_row('account')
