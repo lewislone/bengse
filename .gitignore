@@ -2,4 +2,5 @@
 *.swp
 *.db
 *.csv
+*.csv.*
 .DS_Store

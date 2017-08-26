@@ -37,14 +37,14 @@ class Template:
         DEBUG.pd(name)
         return name[0][1]
 
-    def get_html(self):
+    def get_html(self, contain, homeurl=u'wwww.python.com'):
         temp = self.__get_temp()
         print temp
         name = self.get_fromname()
-        contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
+        #contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
         fromname = self.get_fromname()
         quote = self.get_quote()
-        return temp%(contain, quote, u'www.lll.com', fromname)
+        return temp%(contain, quote, homeurl, fromname)
 
 if __name__ == '__main__':
     temp = Template()

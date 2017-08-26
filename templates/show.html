@@ -1,0 +1,83 @@
+$def with (datas) 
+        <br>
+        <form enctype="multipart/form-data" action=? method="POST">
+        <div class="row">
+          <div class="form-control span2">
+            <legend>邮箱账号</legend>
+            <input type="text" class="form-control span2" placeholder="账号" id="account" name="account">
+            <input type="text" class="form-control span2" placeholder="密码" id="passwd" name="passwd">
+            <input type="text" class="form-control span2" placeholder="授权码" id="idcode" name="idcode">
+            <button type="submit" class="btn btn-small" id='addaccount' name="addaccount">ADD</button>
+            <br></br>
+<textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
+$for account in datas['account']
+    $account
+</textarea>
+            <input type="file" id="accountlist" name="accountlist" size="30">
+            <br></br>
+            <button type="submit" class="btn btn-small" id="addaccountfile" name="addaccountfile">上传</button>
+          </div>
+          <div class="form-control span2">
+            <legend>目的邮箱</legend>
+            <input type="text" class="form-control span2" placeholder="邮箱地址" name="receiver">
+            <button type="submit" class="btn btn-small" id="addreceiver" name="addreceiver">ADD</button>
+            <br></br>
+            <br></br>
+            <br></br>
+<textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
+$for receiver in datas['receiver']
+    $receiver
+</textarea>
+            <input type="file" id="receiverlist" name="receiverlist" size="30">
+            <br></br>
+            <button type="submit" class="btn btn-small" id="addreceiverfile" name="addreceiverfile">上传</button>
+          </div>
+          <div class="form-control span2">
+            <legend>名字变量</legend>
+            <input type="text" class="form-control span2" placeholder="名字" name="name">
+            <button type="submit" class="btn btn-small" id="addname" name="addname">ADD</button>
+            <br></br>
+            <br></br>
+            <br></br>
+<textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
+$for name in datas['name']
+    $name
+</textarea>
+            <input type="file" id="namelist" name="namelist" size="30">
+            <br></br>
+            <button type="submit" class="btn btn-small" id="addnamefile" name="addnamefile">上传</button>
+          </div>
+          <div class="form-control span2">
+            <legend>标题变量</legend>
+            <input type="text" class="form-control span2" placeholder="标题" name="title">
+            <button type="submit" class="btn btn-small" id="addtitle" name="addtitle">ADD</button>
+            <br></br>
+            <br></br>
+            <br></br>
+<textarea style='text-align: left;' rows="10" class="form-control span2" readonly>
+$for title in datas['title']
+    $title
+</textarea>
+            <input type="file" id="titlelist" name="titlelist" size="30">
+            <br></br>
+            <button type="submit" class="btn btn-small" id="addtitlefile" name="addtitlefile">上传</button>
+          </div>
+          <div class="form-control span2">
+            <legend>名言变量</legend>
+            <input type="text" class="form-control span2" placeholder="名言" name="quote">
+            <button type="submit" class="btn btn-small" id="addquote" name="addquote">ADD</button>
+            <br></br>
+            <br></br>
+            <br></br>
+<textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
+$for quote in datas['quote']
+    $quote
+</textarea>
+            <input type="file" id="quotelist" name="quotelist" size="30">
+            <br></br>
+            <button type="submit" class="btn btn-small" id="addquotefile" name="addquotefile">上传</button>
+          </div>
+        </div>
+        <div class="row">
+        </div>
+        </form>

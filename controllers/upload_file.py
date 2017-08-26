@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
 import os
+import sys
 import json
 from config import settings
 sys.path.insert(0,'../lib/webpy')
@@ -26,7 +27,6 @@ class UploadFile:
             			fout.write(x.file_upload.file.read()) # writes the uploaded file to the newly created file.
             			fout.close() # closes the file, upload complete.
             		except Exception, e:
-				traceback.print_exc()
 				json.dumps({'success':0, 'msg':u'文件上传失败！ %s...' % e[1]})
 			else:
 				json.dumps({'success':1, 'msg':u'文件上传成功！'})

@@ -57,6 +57,7 @@ def temp():
     temp.get_quote()
     temp.get_toname()
     temp.get_subject()
+    print temp.get_html()
 
 if __name__ == "__main__":
  

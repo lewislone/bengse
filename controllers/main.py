@@ -3,53 +3,106 @@ import sys
 sys.path.insert(0,'../lib/webpy')
 import web
 import os
+import dao
+import time
+import shutil
 import DEBUG
-
 from config import settings
 import mail.send as send
+import mail.template as template 
 import controllers.csv2sqlite as csv2sqlite
 
-class Test:
+class Show:
     def __init__(self):
         self.render = settings.render
+        self.db = dao.Dao()
+        self.db.init_tables()
+        self.datas = {}
+        self.datas['account'] = ["xxx@163.com, 12345", "xxx@126.com, 12345", "xxx@qq.com, 12345"]
+        self.datas['receiver'] = ["123@qq.com", '3143431@qq.com', '1243827@qq.com']
+        self.datas['name'] = ['lewis', 'lll', 'lone366200']
+        self.datas['title'] = ['hello', 'thanks', 'hi']
+        self.datas['quote'] = ['xxooxooo', 'xxooxoooxoo']
+        self.tmpfiledir = '/tmp'
+
+    def __store_file(self, field_storage, filename):
+        #filepath=field_storage.filename.replace('\\','/')
+        #filename=filepath.split('/')[-1]
+        fout = open(self.tmpfiledir +'/'+ filename,'w')
+        fout.write(field_storage.file.read())
+        fout.close()
+
+    def __to_db(self, type, csvfile):
+        try:
+            c2s = csv2sqlite.csv2sqlite(csvfile)
+            c2s.csv2db(type)
+            c2s.close_db()
+            return 1
+        except:
+            return 0
 
     def GET(self):
-        return self.render.test()
+        return self.render.show(self.datas)
 
     def POST(self):
-        data = web.input(path={})
-        if data.type:
-            DEBUG.p('get limit: %s' % (data.type))
-        if data.sento:
-            DEBUG.p('sent email to : %s' % (data.sento))
-        if data.content:
-            DEBUG.p('content: %s' % (data.content))
-        if data.bindip:
-            DEBUG.p('bind ip %s' % (data.bindip))
+        #data = web.input()
+        data = web.input(quotelist={}, namelist={}, titlelist={}, receiverlist={}, accountlist={})
+        DEBUG.pd(data)
+        if "addaccount" in data:
+            print "add account: ", data['account'], "passwd: ", data['passwd'], "idcode: ", data['idcode']
+            if data['account'] and (data['passwd'] or data['idcode']):
+                self.db.insertone('account', {'account':data['account'], 'passwd':data['passwd'], 'idcode':data['idcode']})
+        if "addreceiver" in data:
+            print "add receiver: ", data['receiver']
+            self.db.insertone('receiver', {'email':data['receiver']})
+        if "addname" in data:
+            print "add name: ", data['name']
+            self.db.insertone('names', {'name':data['name']})
+        if "addtitle" in data:
+            print "add title: ", data['title']
+            self.db.insertone('subjects', {'subject':data['title']})
+        if "addquote" in data:
+            print "add quote: ", data['quote']
+            self.db.insertone('quotes', {'quote':data['quote']})
+        if "addrandom" in data:
+            print "add random: ", data['random']
+            self.db.insertone('randoms', {'random':data['random']})
+        if "addip" in data:
+            print "add ip: ", data['ip']
+            self.db.insertone('ip', {'addr':data['ip']})
 
-        from_addr = 'jdicisyesterday@163.com'
-        password = 'lone366200'
-        smtp_server = 'smtp.163.com'
-        m = send.mail(from_addr, password, smtp_server)
+        if 'accountlist' in data and data.accountlist.filename:
+            print 'in accountlist'
+            self.__store_file(data.accountlist, 'account.csv')
+            if self.__to_db(2, self.tmpfiledir + '/account.csv'):
+                shutil.move(self.tmpfiledir + '/account.csv', './tmp/account.csv.'+time.asctime())
+        if 'receiverlist' in data and data.receiverlist.filename:
+            print 'in receiverlist'
+            self.__store_file(data.receiverlist, 'receiver.csv')
+            if self.__to_db(1, self.tmpfiledir + '/receiver.csv'):
+                shutil.move(self.tmpfiledir + '/receiver.csv', './tmp/receiver.csv.'+time.asctime())
+        if 'quotelist' in data and data.quotelist.filename:
+            print 'in quotelist'
+            self.__store_file(data.quotelist, 'quote.csv')
+            if self.__to_db(6, self.tmpfiledir + '/quote.csv'):
+                shutil.move(self.tmpfiledir + '/quote.csv', './tmp/quote.csv.'+time.asctime())
+        if 'namelist' in data and data.namelist.filename:
+            print 'in namelist'
+            self.__store_file(data.namelist, 'name.csv')
+            if self.__to_db(3, self.tmpfiledir + '/name.csv'):
+                shutil.move(self.tmpfiledir + '/name.csv', './tmp/name.csv.'+time.asctime())
+        if 'titlelist' in data and data.titlelist.filename:
+            print 'in titlelist'
+            self.__store_file(data.titlelist, 'title.csv')
+            if self.__to_db(4, self.tmpfiledir + '/title.csv'):
+                shutil.move(self.tmpfiledir + '/title.csv', './tmp/title.csv.'+time.asctime())
 
-        ip = data.bindip
-        to = data.sento
-        text_type = data.type
-        content = data.content
-        #content = '<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1>' + '<br>---</br>'+ '<p>send by <a href="http://www.python.org">fri</a>...</p>' + '</body></html>'
-        m.send_text(ip, to, content, text_type)
-        return self.render.test()
+        return self.render.show(self.datas)
 
 class New:
     def __init__(self):
         self.render = settings.render
         self.form = web.form.Form(
-                web.form.Textbox('sender', web.form.notnull,
-                                 size=30,
-                                 description=u'发件人'),
-                web.form.Textbox('receiver', web.form.notnull,
-                                 size=30,
-                                 description=u'收件人'),
                 web.form.Textbox('title', web.form.notnull,
                                  size=30,
                                  description=u'邮件标题'),
@@ -65,13 +118,14 @@ class New:
     def POST(self):
         if not self.form.validates():
             return self.render.new(self.form)
-        #pass
-        #model.new_post(form.d.title, form.d.content)
         print self.form.d.title
-        print self.form.d.sender
-        print self.form.d.receiver
         print self.form.d.content
-        raise web.seeother('/newbatch')
+        temp = template.Template('./templates/temp1.htm')
+        print temp.get_quote()
+        print temp.get_toname()
+        print temp.get_subject()
+        print temp.get_html(self.form.d.content)
+        raise web.seeother('/new')
 
 class NewBatch:
     def __init__(self):
@@ -135,6 +189,7 @@ class NewBatch:
 
         '''
         raise web.seeother('/')
+
 class Imgs:
     def GET(self, name):
         ext = name.split(".")[-1]
