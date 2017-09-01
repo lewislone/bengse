@@ -2,7 +2,6 @@
 import sys
 sys.path.insert(0,'../lib/webpy')
 import web
-import os
 import dao
 import time
 import shutil
@@ -11,6 +10,18 @@ from config import settings
 import mail.send as send
 import mail.template as template 
 import controllers.csv2sqlite as csv2sqlite
+import utils.loadjson as loadjson
+
+import os
+class return_num:
+    def GET(self):
+        path = os.getcwd() + '/tmp/tmp.json'
+        data = {}
+        if os.path.exists(path):
+            data = loadjson.loadfromjson(path)
+        else:
+            data = {'sent_count': 0, 'succeed': 0}
+        return data['sent_count']
 
 class Show:
     def __init__(self):
@@ -113,6 +124,8 @@ class Show:
 
 class New:
     def __init__(self):
+        self.db = dao.Dao()
+        self.db.init_tables()
         self.render = settings.render
         self.form = web.form.Form(
                 web.form.Textbox('title', web.form.notnull,
@@ -125,7 +138,7 @@ class New:
         )
 
     def GET(self):
-        return self.render.new(self.form)
+        return self.render.new(self.form, self.db.total_row('receiver'))
 
     def POST(self):
         if not self.form.validates():

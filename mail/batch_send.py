@@ -26,6 +26,20 @@ class Batchsend:
             self.status['receivers'] = {}
             self.status['ip'] = {}
 
+        os.remove(os.getcwd() + '/tmp/tmp.json')
+
+    def __save_count(self, ok):
+        path = os.getcwd() + '/tmp/tmp.json'
+        data = {}
+        if os.path.exists(path):
+            data = loadjson.loadfromjson(path)
+        else:
+            data = {'sent_count': 0, 'succeed': 0}
+        data['sent_count'] = data['sent_count'] + 1
+        if ok == 0:
+            data['succeed'] = data['succeed'] + 1
+        loadjson.loadtojson(data, path)
+
     def __get_contain(self):
         return self.temp.get_html(self.content)
 
@@ -66,10 +80,11 @@ class Batchsend:
         self.status[type][key]['count'] += 1
 
     def sent_mail(self, ip, receiver, account, account_type):
+        ret = 0
         addr = account[1]
         if addr in self.status['accounts'].keys() and 'count' in self.status['accounts'][addr].keys():
             if self.status['accounts'][addr]['count'] >= account_type['max']:
-                return
+                return ret
         if addr[-6:] == 'qq.com' and account[10] != '':
             pw = account[10]
         else:
@@ -86,7 +101,7 @@ class Batchsend:
         if ret:
             print 'login smtp failed!!!  %d'%ret
             mail.quit()
-            return
+            return ret
         content = self.__get_contain()
         subject = self.title+' '+self.__get_subject()
         toname = self.__get_toname()
@@ -97,6 +112,7 @@ class Batchsend:
         if ret:
             print 'send email failed!!!  %d'%ret
         mail.quit()
+        return ret
 
     def __random_get_index(self, max):
         return choice(range(max))
@@ -129,7 +145,8 @@ class Batchsend:
                 print 'receiver: '
                 DEBUG.pd(receiver)
                 print 'ip: ', ip
-                self.sent_mail(ip, receiver, account, account_type)
+                ret = self.sent_mail(ip, receiver, account, account_type)
+                self.__save_count(ret)
                 if last_account == account[1]:
                     time.sleep(account_type['interval']*2/1000.0)
                 last_account = account[1]

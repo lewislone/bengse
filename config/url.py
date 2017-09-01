@@ -26,6 +26,7 @@ urls = (
 '''
 urls = (
     '/',            pre_fix + 'main.Show',
+    '/num',         pre_fix + 'main.return_num',
     '/upload',      pre_fix + 'upload_file.UploadFile',
     '/new',  	    pre_fix + 'main.New',
     '/newbatch',    pre_fix + 'main.NewBatch',
