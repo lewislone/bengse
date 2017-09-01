@@ -128,9 +128,9 @@ class New:
         self.db.init_tables()
         self.render = settings.render
         self.form = web.form.Form(
-                #web.form.Textbox('title', web.form.notnull,
-                #                 size=30,
-                #                 description=u'邮件标题'),
+                web.form.Textbox('title', web.form.notnull,
+                                 size=30,
+                                 description=u'邮件标题'),
                 web.form.Textarea('content', web.form.notnull,
                                   rows=30, cols=80,
                                   description=u'邮件内容'),
