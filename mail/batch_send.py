@@ -55,7 +55,7 @@ class Batchsend:
 
     def __get_reciver(self, rcv_index):
         if rcv_index == 0:
-            rcv_index == 1
+            rcv_index = 1
         receiver = self.db.fetchone_by_id('receiver', rcv_index)
         return receiver[0]
 
@@ -65,7 +65,7 @@ class Batchsend:
 
     def __get_ip(self, id):
         if id == 0:
-            id == 1
+            id = 1
         ip = self.db.fetchone_by_id('ip', id) 
         return ip[0]
 
@@ -96,11 +96,15 @@ class Batchsend:
             pw = account[2]
         print 'passwd: ', pw
         smpt = account[3]
-        if account[9]:
-            mail = send.Mail(addr, pw, smpt, account[9], account_type['port']) #use last_ip
-        else:
-            mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
-            self.db.update_last_by_key_value('account', 'account', addr, ip)
+        try:
+            if account[9]:
+                mail = send.Mail(addr, pw, smpt, account[9], account_type['port']) #use last_ip
+            else:
+                mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
+                self.db.update_last_by_key_value('account', 'account', addr, ip)
+        except:
+            print 'connect to smtp server failed!!!!'
+            return -1
         ret = mail.loginsmtp()
         self.__update_status('accounts', addr, ret)
         if ret:

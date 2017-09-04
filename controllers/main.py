@@ -135,7 +135,7 @@ class New:
                 web.form.Textarea('content', web.form.notnull,
                                   rows=30, cols=80,
                                   description=u'邮件内容'),
-                web.form.Button(u'发送')
+                web.form.Button(u'SEND')
         )
 
     def GET(self):
@@ -144,9 +144,9 @@ class New:
     def POST(self):
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))
-        print self.form.d.title.decode('unicode-escape').decode('utf-8')
-        print self.form.d.content.decode('unicode-escape').decode('utf-8')
-        batchsend = batch_send.Batchsend(self.form.d.title.decode('unicode-escape').decode('utf-8'), self.form.d.content.decode('unicode-escape').decode('utf-8'))
+        print self.form.d.title.encode('utf-8')
+        print self.form.d.content.encode('utf-8')
+        batchsend = batch_send.Batchsend(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8'))
         batchsend.run()
         raise web.seeother('/new')
 
