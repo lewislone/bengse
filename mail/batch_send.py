@@ -16,7 +16,7 @@ class Batchsend:
         self.db.init_tables()
         self.content = content
         self.title = title
-        self.temp  = template.Template('./templates/temp1.htm')
+        self.temp = template.Template('./templates/temp1.htm')
         jsonfile = os.getcwd() + u"/tmp/status.json"
         if os.path.exists(jsonfile):
             self.status = loadjson.loadfromjson(os.getcwd() + u"/tmp/status.json")
@@ -26,7 +26,8 @@ class Batchsend:
             self.status['receivers'] = {}
             self.status['ip'] = {}
 
-        os.remove(os.getcwd() + '/tmp/tmp.json')
+        if os.path.exists(os.getcwd() + '/tmp/tmp.json'):
+            os.remove(os.getcwd() + '/tmp/tmp.json')
 
     def __save_count(self, ok):
         path = os.getcwd() + '/tmp/tmp.json'
@@ -53,6 +54,8 @@ class Batchsend:
         return self.temp.get_fromname()
 
     def __get_reciver(self, rcv_index):
+        if rcv_index == 0:
+            rcv_index == 1
         receiver = self.db.fetchone_by_id('receiver', rcv_index)
         return receiver[0]
 
@@ -61,6 +64,8 @@ class Batchsend:
         return accounts
 
     def __get_ip(self, id):
+        if id == 0:
+            id == 1
         ip = self.db.fetchone_by_id('ip', id) 
         return ip[0]
 
@@ -110,7 +115,7 @@ class Batchsend:
         ret = mail.send_text(receiver[1], toname, fromname, content, 'html', subject)
         self.__update_status('receivers', receiver[1], ret)
         if ret:
-            print 'send email failed!!!  %d'%ret
+            print 'send email failed!!!'
         mail.quit()
         return ret
 
@@ -121,7 +126,7 @@ class Batchsend:
         index = self.__random_get_index(len(accounts))
         return accounts[index]
 
-    def run(self, content):
+    def run(self):
         #init
         print 'total ip row: ', self.db.total_row('ip')
         print 'total accounts row: ', self.db.total_row('account')
@@ -150,8 +155,6 @@ class Batchsend:
                 if last_account == account[1]:
                     time.sleep(account_type['interval']*2/1000.0)
                 last_account = account[1]
-                break
-            break
 
     def stop(self):
         print("stop...")

@@ -10,6 +10,7 @@ from config import settings
 import mail.send as send
 import mail.template as template 
 import controllers.csv2sqlite as csv2sqlite
+import mail.batch_send as batch_send
 import utils.loadjson as loadjson
 
 import os
@@ -143,10 +144,9 @@ class New:
     def POST(self):
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))
-        print self.form.d.title
-        print self.form.d.content
-        temp = template.Template('./templates/temp1.htm')
-        batchsend = batch_send.Batchsend(self.form.d.title, self.form.d.content)
+        print self.form.d.title.decode('unicode-escape').decode('utf-8')
+        print self.form.d.content.decode('unicode-escape').decode('utf-8')
+        batchsend = batch_send.Batchsend(self.form.d.title.decode('unicode-escape').decode('utf-8'), self.form.d.content.decode('unicode-escape').decode('utf-8'))
         batchsend.run()
         raise web.seeother('/new')
 
