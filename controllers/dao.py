@@ -109,7 +109,7 @@ class Dao:
             sql = 'select * from %s' % table
             self.cursor.execute(sql)
             re = self.cursor.fetchall()
-            print len(re), re
+            #print len(re), re
             return re
 
     def fetchone(self, sql):
@@ -311,7 +311,7 @@ class Dao:
         row['reserve3'] = ''
         tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
         sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
-        print sql
+        print 'insert %s'%table
         try:
             self.cursor.execute(sql)
             self.conn.commit()

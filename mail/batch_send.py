@@ -155,6 +155,9 @@ class Batchsend:
                 DEBUG.pd(receiver)
                 print 'ip: ', ip
                 ret = self.sent_mail(ip, receiver, account, account_type)
+                if ret < 0:
+                    account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
+                    ret = self.sent_mail(ip, receiver, account, account_type)
                 self.__save_count(ret)
                 if last_account == account[1]:
                     time.sleep(account_type['interval']*2/1000.0)
