@@ -149,13 +149,11 @@ class Batchsend:
                 account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
                 receiver = self.__get_reciver(rcv_index)
                 ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
-                print 'account: '
-                DEBUG.pd(account)
-                print 'receiver: '
-                DEBUG.pd(receiver)
-                print 'ip: ', ip
-                print 'count: ', self.status['accounts'][account[1]]['count']
+                print 'account: ', account[1]
+                print 'receiver: ', receiver[1]
+                print 'ip: ', ip[1]
                 if account[1] in self.status['accounts'].keys():
+                    print 'count: ', self.status['accounts'][account[1]]['count']
                     if self.status['accounts'][account[1]]['count'] >= account_type['max']: 
                         print account[1], ' sent too many email ', account_type['max']
                         continue
