@@ -18,6 +18,8 @@ def sendtest():
     #mail.send_html_with_attachment(receiver, content, attachment_path):
 
 def initDB():
+    db = dao.Dao()
+    db.init_tables()
     c2s = csv2sqlite.csv2sqlite('./tmp/account.csv')
     c2s.csv2db(2)
     c2s.close_db()
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     #db.fetchone_by_id("account", 1)
     #db.fetchone_by_key_value("account", "account", "a91008950@163.com" )
 
-    #initDB()
+    initDB()
 
     #batchsend()
 
@@ -86,4 +88,4 @@ if __name__ == "__main__":
 
     #loadjsonfile()
 
-    temp()
+    #temp()

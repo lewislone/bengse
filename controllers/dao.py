@@ -129,6 +129,13 @@ class Dao:
             sql = 'SELECT * FROM %s WHERE %s = "%s"'%(table, key, str(value))
             return self.fetchone(sql)
 
+    def clear_table(self, table):
+        if table is not None and table != '':
+            sql = 'DELETE FROM %s' % (table)
+            #sql = 'DELETE FROM sqlite_sequence WHERE name = "%s"' % table
+            self.cursor.execute(sql)
+            self.conn.commit()
+
     def delete_by_id(self, table, id):
         if table is not None and table != '':
             sql = 'DELETE FROM %s WHERE ID = "%s"' % (table, str(id))
@@ -311,7 +318,7 @@ class Dao:
         row['reserve3'] = ''
         tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
         sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
-        print 'insert %s'%table
+        print 'insert %s: %s'%(table, tmp)
         try:
             self.cursor.execute(sql)
             self.conn.commit()

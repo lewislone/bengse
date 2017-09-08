@@ -60,6 +60,28 @@ class Show:
         #data = web.input()
         data = web.input(quotelist={}, namelist={}, titlelist={}, receiverlist={}, accountlist={})
         DEBUG.pd(data)
+
+        if "clearreceiver" in data:
+            print "clear receiver"
+            self.db.clear_table('receiver')
+            self.datas['receiver'] = []
+        if "clearaccount" in data:
+            print "clear account"
+            self.db.clear_table('account')
+            self.datas['account'] = []
+        if "clearname" in data:
+            print "clear name"
+            self.db.clear_table('names')
+            self.datas['name'] = []
+        if "cleartitle" in data:
+            print "clear title"
+            self.db.clear_table('subjects')
+            self.datas['title'] = []
+        if "clearquote" in data:
+            print "clear quote"
+            self.db.clear_table('quotes')
+            self.datas['quote'] = []
+
         if "addaccount" in data:
             print "add account: ", data['account'], "passwd: ", data['passwd'], "idcode: ", data['idcode']
             if data['account'] and (data['passwd'] or data['idcode']):
