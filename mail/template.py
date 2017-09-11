@@ -2,11 +2,13 @@
 import os
 import DEBUG
 import controllers.dao as dao
+from random import choice
 
 class Template:
     def __init__(self, tempfile):
         self.db = dao.Dao()
         #self.db.init_tables()
+        self.line = [u'TTTTTTTTTT', u'++++++++++', u'-+-+-+-+-+-', u'=-=-=-=-=-=', u'-------', u'=======', u'_______', u'........', u'********', u'#########', u'````````', u'~~~~~~~~~~', u'.....']
         if os.path.exists(tempfile):
             self.tempfile = tempfile
         else:
@@ -37,6 +39,9 @@ class Template:
         DEBUG.pd(name)
         return name[0][1]
 
+    def get_line(self):
+        return choice(self.line)
+
     def get_html(self, contain):
         temp = self.__get_temp()
         print temp
@@ -45,7 +50,8 @@ class Template:
         fromname = self.get_fromname()
         homeurl=u'wwww.%s.com'%fromname
         quote = self.get_quote()
-        return temp%(contain, quote, homeurl, fromname)
+        line = self.get_line()
+        return temp%(contain, line, quote, homeurl, fromname)
 
 if __name__ == '__main__':
     temp = Template()
