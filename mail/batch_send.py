@@ -154,7 +154,7 @@ class Batchsend:
                 print 'ip: ', ip[1]
                 if account[1] in self.status['accounts'].keys():
                     print 'count: ', self.status['accounts'][account[1]]['count']
-                    if self.status['accounts'][account[1]]['count'] >= (account_type['max'] - 30):
+                    if self.status['accounts'][account[1]]['count'] >= (account_type['max'] - 25):
                         print account[1], ' sent too many email ', account_type['max']
                         continue
                 ret = self.sent_mail(ip, receiver, account, account_type)
@@ -163,8 +163,8 @@ class Batchsend:
                     ret = self.sent_mail(ip, receiver, account, account_type)
                 self.__save_count(ret)
                 if last_account == account[1]:
-                    time.sleep(account_type['interval']*20/1000.0)
-                time.sleep(account_type['interval']*20/1000.0)
+                    time.sleep(account_type['interval'])
+                time.sleep(account_type['interval']*10/1000.0)
                 last_account = account[1]
 
     def stop(self):

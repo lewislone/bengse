@@ -147,13 +147,13 @@ c = {
                             'il.com': {
                                         'smtp': 'smtp.gmail.com',
                                         'max' : 50,
-                                        'interval' : 100,
+                                        'interval' : 10,
                                         'port': 587,
                                     },
                             'qq.com': {
                                         'smtp': 'smtp.qq.com',
                                         'max' : 50,
-                                        'interval' : 100,
+                                        'interval' : 45,
                                         'port': 587,
                                     },
                             'mx.com': {
@@ -165,55 +165,55 @@ c = {
                             'ab.com': {
                                         'smtp': 'smtp.gawab.com',
                                         'max' : 100,
-                                        'interval' : 100,
+                                        'interval' : 10,
                                         'port': 25,
                                     },
                             '63.com': {
                                         'smtp': 'smtp.163.com',
                                         'max' : 50,
-                                        'interval' : 100,
+                                        'interval' : 20,
                                         'port': 25,
                                     },
                             '26.com': {
                                         'smtp': 'smtp.126.com',
                                         'max' : 50,
-                                        'interval' : 100,
+                                        'interval' : 20,
                                         'port': 25,
                                     },
-                            'ah.com': {
-                                        'smtp': 'smtp.yeah.com',
+                            'ah.net': {
+                                        'smtp': 'smtp.yeah.net',
                                         'max' : 50,
-                                        'interval' : 100,
+                                        'interval' : 20,
                                         'port': 25,
                                     },
                             'ol.com': {
                                         'smtp': 'smtp.aol.com',
                                         'max' : 100,
-                                        'interval' : 100,
+                                        'interval' : 5,
                                         'port': 25,
                                     },
                             'hu.com': {
                                         'smtp': 'smtp.sohu.com',
                                         'max' : 100,
-                                        'interval' : 200,
+                                        'interval' : 140,
                                         'port': 25,
                                     },
                             '39.com': {
                                         'smtp': 'smtp.139.com',
                                         'max' : 100,
-                                        'interval' : 100,
+                                        'interval' : 15,
                                         'port': 25,
                                     },
                             'na.com': {
                                         'smtp': 'smtp.sina.com',
                                         'max' : 30,
-                                        'interval' : 200,
+                                        'interval' : 130,
                                         'port': 25,
                                     },
                             've.com': {
                                         'smtp': 'smtp.live.com',
                                         'max' : 100,
-                                        'interval' : 100,
+                                        'interval' : 10,
                                         'port': 25,
                                     },
                         }
