@@ -41,8 +41,8 @@ class Batchsend:
             data['succeed'] = data['succeed'] + 1
         loadjson.loadtojson(data, path)
 
-    def __get_contain(self):
-        return self.temp.get_html(self.content)
+    def __get_contain(self, receiver):
+        return self.temp.get_html(self.content, receiver)
 
     def __get_subject(self):
         return self.temp.get_subject()
@@ -111,7 +111,7 @@ class Batchsend:
             print 'login smtp failed!!!  %d'%ret
             mail.quit()
             return ret
-        content = self.__get_contain()
+        content = self.__get_contain(receiver[1])
         subject = self.title+' '+self.__get_subject()
         toname = self.__get_toname()
         fromname = self.__get_fromname()

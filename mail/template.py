@@ -42,7 +42,7 @@ class Template:
     def get_line(self):
         return choice(self.line)
 
-    def get_html(self, contain):
+    def get_html(self, contain, receiver):
         temp = self.__get_temp()
         print temp
         name = self.get_fromname()
@@ -51,7 +51,8 @@ class Template:
         homeurl=u'wwww.%s.com'%fromname
         quote = self.get_quote()
         line = self.get_line()
-        return temp%(contain, line, quote, homeurl, fromname)
+        hi = u'【%s】 您好：'%receiver[:receiver.index('@')]
+        return temp%(hi, contain, line, quote, homeurl, fromname)
 
 if __name__ == '__main__':
     temp = Template()
