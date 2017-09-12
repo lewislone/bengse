@@ -114,9 +114,13 @@ class Dao:
 
     def fetchone(self, sql):
         if sql is not None and sql != '':
-            self.cursor.execute(sql)
-            re = self.cursor.fetchall()
-            print 'fetch: ', len(re)
+            try:
+                self.cursor.execute(sql)
+                re = self.cursor.fetchall()
+                print 'fetch: ', len(re)
+            except:
+                print 'fatchone failed:%s'%sql
+                re = ''
             return re
 
     def fetchone_by_id(self, table, id):

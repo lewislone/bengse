@@ -157,10 +157,13 @@ class Batchsend:
                     if self.status['accounts'][account[1]]['count'] >= (account_type['max'] - 25):
                         print account[1], ' sent too many email ', account_type['max']
                         continue
-                ret = self.sent_mail(ip, receiver, account, account_type)
-                if ret < 0:
-                    account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
+                try:
                     ret = self.sent_mail(ip, receiver, account, account_type)
+                    if ret < 0:
+                        account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
+                        ret = self.sent_mail(ip, receiver, account, account_type)
+                except:
+                    print 'sent_mail failed!!!'
                 self.__save_count(ret)
                 if last_account == account[1]:
                     time.sleep(account_type['interval'])

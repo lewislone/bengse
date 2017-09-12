@@ -36,7 +36,8 @@ class csv2sqlite:
                 # use buffered IO and memory management to help with large files
                     yield row
         except Exception as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            #print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            print e
             print "File {} NOT found".format(self.csvfile)
 
     def csv2db(self, type):

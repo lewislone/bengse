@@ -51,6 +51,7 @@ class Show:
             c2s.close_db()
             return 1
         except:
+            print "c2s error..."
             return 0
 
     def GET(self):
