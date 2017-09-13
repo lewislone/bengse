@@ -163,6 +163,7 @@ class Batchsend:
                         account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
                         ret = self.sent_mail(ip, receiver, account, account_type)
                 except:
+                    ret = -1
                     print 'sent_mail failed!!!'
                 self.__save_count(ret)
                 if last_account == account[1]:
