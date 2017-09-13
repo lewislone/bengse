@@ -57,7 +57,10 @@ class Batchsend:
         if rcv_index == 0:
             rcv_index = 1
         receiver = self.db.fetchone_by_id('receiver', rcv_index)
-        return receiver[0]
+        if len(receiver):
+            return receiver[0]
+        else:
+            return 'actiontec_test@qq.com'
 
     def __get_account(self, smtp):
         accounts = self.db.fetchone_by_key_value('account', 'smtp', smtp)
