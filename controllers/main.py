@@ -60,7 +60,7 @@ class Show:
     def POST(self):
         #data = web.input()
         data = web.input(quotelist={}, namelist={}, titlelist={}, receiverlist={}, accountlist={})
-        DEBUG.pd(data)
+        #DEBUG.pd(data)
 
         if "clearreceiver" in data:
             print "clear receiver"

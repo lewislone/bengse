@@ -32,9 +32,12 @@ class Batchsend:
     def __save_count(self, ok):
         path = os.getcwd() + '/tmp/tmp.json'
         data = {}
-        if os.path.exists(path):
-            data = loadjson.loadfromjson(path)
-        else:
+        try:
+            if os.path.exists(path):
+                data = loadjson.loadfromjson(path)
+            else:
+                data = {'sent_count': 0, 'succeed': 0}
+        except:
             data = {'sent_count': 0, 'succeed': 0}
         data['sent_count'] = data['sent_count'] + 1
         if ok == 0:
@@ -103,11 +106,19 @@ class Batchsend:
             if account[9]:
                 mail = send.Mail(addr, pw, smpt, account[9], account_type['port']) #use last_ip
             else:
-                mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
-                self.db.update_last_by_key_value('account', 'account', addr, ip)
+                try:
+                    mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
+                    self.db.update_last_by_key_value('account', 'account', addr, ip)
+                except:
+                    print 'connect to smtp server failed with new ip'
         except:
-            print 'connect to smtp server failed!!!!'
-            return -1
+            try:
+                if account[9]:
+                    mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
+                    self.db.update_last_by_key_value('account', 'account', addr, ip)
+            except:
+                print 'connect to smtp server failed!!!!'
+                return -1
         ret = mail.loginsmtp()
         self.__update_status('accounts', addr, ret)
         if ret:
@@ -164,6 +175,9 @@ class Batchsend:
                     ret = self.sent_mail(ip, receiver, account, account_type)
                     if ret < 0:
                         account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
+                        print 'account: ', account[1]
+                        print 'receiver: ', receiver[1]
+                        print 'ip: ', ip[1]
                         ret = self.sent_mail(ip, receiver, account, account_type)
                 except:
                     ret = -1

@@ -21,22 +21,22 @@ class Template:
 
     def get_quote(self):
         quote = self.db.get_random('quotes')
-        DEBUG.pd(quote)
+        #DEBUG.pd(quote)
         return quote[0][1]
         
     def get_subject(self):
         subject = self.db.get_random('subjects')
-        DEBUG.pd(subject)
+        #DEBUG.pd(subject)
         return subject[0][1]
 
     def get_toname(self):
         name = self.db.get_random('names')
-        DEBUG.pd(name)
+        #DEBUG.pd(name)
         return name[0][1]
 
     def get_fromname(self):
         name = self.db.get_random('names')
-        DEBUG.pd(name)
+        #DEBUG.pd(name)
         return name[0][1]
 
     def get_line(self):
@@ -44,7 +44,7 @@ class Template:
 
     def get_html(self, contain, receiver):
         temp = self.__get_temp()
-        print temp
+        #print temp
         name = self.get_fromname()
         #contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
         fromname = self.get_fromname()

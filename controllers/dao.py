@@ -322,7 +322,8 @@ class Dao:
         row['reserve3'] = ''
         tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
         sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
-        print 'insert %s: %s'%(table, tmp)
+        #print 'insert %s: %s'%(table, tmp)
+        print 'insert %s'%(table)
         try:
             self.cursor.execute(sql)
             self.conn.commit()
@@ -387,7 +388,7 @@ class Dao:
 
     def init_tables(self):
         for i in range(len(settings.c['db_name'])):
-            print settings.c['db_name'][i]['sql']
+            #print settings.c['db_name'][i]['sql']
             try:
                 self.cursor.execute(settings.c['db_name'][i]['sql'])
             except:
