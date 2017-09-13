@@ -113,31 +113,31 @@ class Show:
             self.db.insertone('ip', {'addr':data['ip']})
             self.datas['ip'].append(data['ip'])
 
-        if 'accountlist' in data and data.accountlist.filename:
+        if 'accountlist' in data and 'filename' in data.accountlist:
             print 'in accountlist'
             self.__store_file(data.accountlist, 'account.csv')
             if self.__to_db(2, self.tmpfiledir + '/account.csv'):
                 shutil.move(self.tmpfiledir + '/account.csv', './tmp/account.csv.'+time.asctime())
                 self.datas['account'] = self.db.get_all_account() 
-        if 'receiverlist' in data and data.receiverlist.filename:
+        if 'receiverlist' in data and 'filename' in data.receiverlist:
             print 'in receiverlist'
             self.__store_file(data.receiverlist, 'receiver.csv')
             if self.__to_db(1, self.tmpfiledir + '/receiver.csv'):
                 shutil.move(self.tmpfiledir + '/receiver.csv', './tmp/receiver.csv.'+time.asctime())
                 self.datas['receiver'] = self.db.get_all_receiver() 
-        if 'quotelist' in data and data.quotelist.filename:
+        if 'quotelist' in data and 'filename' in data.quotelist:
             print 'in quotelist'
             self.__store_file(data.quotelist, 'quote.csv')
             if self.__to_db(6, self.tmpfiledir + '/quote.csv'):
                 shutil.move(self.tmpfiledir + '/quote.csv', './tmp/quote.csv.'+time.asctime())
                 self.datas['quote'] = self.db.get_all_quote()
-        if 'namelist' in data and data.namelist.filename:
+        if 'namelist' in data and 'filename' in data.namelist:
             print 'in namelist'
             self.__store_file(data.namelist, 'name.csv')
             if self.__to_db(3, self.tmpfiledir + '/name.csv'):
                 shutil.move(self.tmpfiledir + '/name.csv', './tmp/name.csv.'+time.asctime())
                 self.datas['name'] = self.db.get_all_name()
-        if 'titlelist' in data and data.titlelist.filename:
+        if 'titlelist' in data and 'filename' in data.titlelist:
             print 'in titlelist'
             self.__store_file(data.titlelist, 'title.csv')
             if self.__to_db(4, self.tmpfiledir + '/title.csv'):

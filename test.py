@@ -12,7 +12,7 @@ import DEBUG
 def sendtest():
     content = u'<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1><br>---</br><p>send by <a href="http://www.python.org">suninrain</a>...</p></body></html>'
     subject = u'3Q'
-    mail = send.Mail('2371433957@qq.com', 'ojjbenmnnunneabc', 'smtp.qq.com', '192.168.1.8', 587)
+    mail = send.Mail('ym0048046@yeah.net', 'yueson', 'smtp.yeah.net', '192.168.1.8')
     mail.loginsmtp()
     mail.send_text('jdic@qq.com', 'lll', 'suninrain', content, 'html', subject)
     #mail.send_html_with_attachment(receiver, content, attachment_path):
@@ -80,11 +80,11 @@ if __name__ == "__main__":
     #db.fetchone_by_id("account", 1)
     #db.fetchone_by_key_value("account", "account", "a91008950@163.com" )
 
-    initDB()
+    #initDB()
 
     #batchsend()
 
-    #sendtest()
+    sendtest()
 
     #loadjsonfile()
 
