@@ -117,13 +117,14 @@ class Batchsend:
                     mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
                     self.db.update_last_by_key_value('account', 'account', addr, ip)
             except:
+                self.__update_status('accounts', addr, -1)
                 print 'connect to smtp server failed!!!!'
                 return -1
         ret = mail.loginsmtp()
-        self.__update_status('accounts', addr, ret)
         if ret:
             print 'login smtp failed!!!  %d'%ret
             mail.quit()
+            self.__update_status('accounts', addr, ret)
             return ret
         content = self.__get_contain(receiver[1])
         subject = self.title+' '+self.__get_subject()
@@ -167,7 +168,7 @@ class Batchsend:
                 print 'receiver: ', receiver[1]
                 print 'ip: ', ip[1]
                 if account[1] in self.status['accounts'].keys():
-                    print 'count: ', self.status['accounts'][account[1]]['count']
+                    print '###count: ', self.status['accounts'][account[1]]['count']
                     if self.status['accounts'][account[1]]['count'] >= (account_type['max'] - 25):
                         print account[1], ' sent too many email ', account_type['max']
                         continue
@@ -185,7 +186,7 @@ class Batchsend:
                 self.__save_count(ret)
                 if last_account == account[1]:
                     time.sleep(account_type['interval'])
-                time.sleep(account_type['interval']*10/1000.0)
+                time.sleep(account_type['interval']*20/1000.0)
                 last_account = account[1]
 
     def stop(self):
