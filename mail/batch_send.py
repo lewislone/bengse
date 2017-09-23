@@ -12,7 +12,6 @@ import template
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
-        self.running = 0
         self.db = dao.Dao()
         self.db.init_tables()
         self.content = content
@@ -29,6 +28,7 @@ class Batchsend:
 
         if os.path.exists(os.getcwd() + '/tmp/tmp.json'):
             os.remove(os.getcwd() + '/tmp/tmp.json')
+
 
     def __save_count(self, ok):
         path = os.getcwd() + '/tmp/tmp.json'
@@ -155,17 +155,16 @@ class Batchsend:
         random.shuffle(rcv_indexs)
         ip_indexs = range(self.db.total_row('ip'))
         random.shuffle(ip_indexs)
-        self.running = 1
 
         for (key, account_type) in settings.c['account_type'].items(): #list all account type one by one
-            if self.running == 0:
+            if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
                 break;
             accounts = self.__get_account(account_type['smtp'])
             if len(accounts) == 0:
                 continue
             last_account = ''
             for rcv_index in rcv_indexs: #random get a receiver
-                if self.running == 0:
+                if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
                     break;
                 account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
                 receiver = self.__get_reciver(rcv_index)
@@ -198,8 +197,7 @@ class Batchsend:
         self.db = dao.Dao()
 
     def stop(self):
-        if self.running:
-            self.running = 0
+        os.remove(os.getcwd() + "/tmp/senderrunning")
         print("stop...")
 
 if __name__ == "__main__":

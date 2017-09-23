@@ -197,6 +197,11 @@ class New:
         return self.render.new(self.form, self.db.total_row('receiver'))
 
     def POST(self):
+        data = web.input()
+        if 'stop' in data:
+            print 'stop send mail'
+            os.remove(os.getcwd() + "/tmp/senderrunning")
+
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))
 
