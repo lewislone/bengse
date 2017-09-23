@@ -16,7 +16,8 @@ class Mail():
     def __init__(self, addr, pw, smpt, ip, port=25):
         self.from_addr = addr
         self.password = pw
-        self.server = smtplib.SMTP(ip, smpt, port)
+        localhost = ip
+        self.server = smtplib.SMTP(ip, smpt, port, localhost)
         if port != 25:
            self.server.starttls()
         self.server.set_debuglevel(settings.c['debuglevel'])

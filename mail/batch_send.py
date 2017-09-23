@@ -12,6 +12,7 @@ import template
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
+        self.running = 0
         self.db = dao.Dao()
         self.db.init_tables()
         self.content = content
@@ -154,13 +155,18 @@ class Batchsend:
         random.shuffle(rcv_indexs)
         ip_indexs = range(self.db.total_row('ip'))
         random.shuffle(ip_indexs)
+        self.running = 1
 
         for (key, account_type) in settings.c['account_type'].items(): #list all account type one by one
+            if self.running == 0:
+                break;
             accounts = self.__get_account(account_type['smtp'])
             if len(accounts) == 0:
                 continue
             last_account = ''
             for rcv_index in rcv_indexs: #random get a receiver
+                if self.running == 0:
+                    break;
                 account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
                 receiver = self.__get_reciver(rcv_index)
                 ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
@@ -169,7 +175,7 @@ class Batchsend:
                 print 'ip: ', ip[1]
                 if account[1] in self.status['accounts'].keys():
                     print '###count: ', self.status['accounts'][account[1]]['count']
-                    if self.status['accounts'][account[1]]['count'] >= (account_type['max'] - 25):
+                    if self.status['accounts'][account[1]]['count'] > account_type['max']:
                         print account[1], ' sent too many email ', account_type['max']
                         continue
                 try:
@@ -185,11 +191,15 @@ class Batchsend:
                     print 'sent_mail failed!!!'
                 self.__save_count(ret)
                 if last_account == account[1]:
-                    time.sleep(account_type['interval'])
-                time.sleep(account_type['interval']*20/1000.0)
+                    time.sleep(account_type['interval']*10)
+                time.sleep(5)
                 last_account = account[1]
 
+        self.db = dao.Dao()
+
     def stop(self):
+        if self.running:
+            self.running = 0
         print("stop...")
 
 if __name__ == "__main__":
