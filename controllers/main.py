@@ -12,6 +12,7 @@ import mail.template as template
 import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import utils.loadjson as loadjson
+import threading
 
 import os
 class return_num:
@@ -22,6 +23,7 @@ class return_num:
             data = loadjson.loadfromjson(path)
         else:
             data = {'sent_count': 0, 'succeed': 0}
+        print data['sent_count'],data['succeed']
         return data['sent_count']
 
 class Show:
@@ -161,16 +163,48 @@ class New:
                 web.form.Button(u'SEND')
         )
 
+    def thread_run(self, title, content):
+        #print self.form.d.title.encode('utf-8')
+        #print self.form.d.content.encode('utf-8')
+
+        print title
+        print content
+        #os.mknod(os.getcwd() + "/tmp/senderrunning")
+        f = file(os.getcwd() + "/tmp/senderrunning", "w")
+        f.close()
+        print "start batch sent...."
+        batchsend = batch_send.Batchsend(title, content)
+        batchsend.run()
+
+        #for i in range(10):
+        #        time.sleep(1)
+        #        path = os.getcwd() + '/tmp/tmp.json'
+        #        data = {}
+        #        try:
+        #            if os.path.exists(path):
+        #                data = loadjson.loadfromjson(path)
+        #            else:
+        #                data = {'sent_count': 0, 'succeed': 0}
+        #        except:
+        #            data = {'sent_count': 0, 'succeed': 0}
+        #        data['sent_count'] = data['sent_count'] + 1
+        #        data['succeed'] = data['succeed'] + 1
+        #        loadjson.loadtojson(data, path)
+        os.remove(os.getcwd() + "/tmp/senderrunning")
+        print "end batch sent...."
+
     def GET(self):
         return self.render.new(self.form, self.db.total_row('receiver'))
 
     def POST(self):
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))
-        print self.form.d.title.encode('utf-8')
-        print self.form.d.content.encode('utf-8')
-        batchsend = batch_send.Batchsend(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8'))
-        batchsend.run()
+
+        if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
+           t =threading.Thread(target=self.thread_run, args=(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8')))
+           t.setDaemon(True)
+           t.start()
+
         raise web.seeother('/new')
 
 class NewBatch:
