@@ -2,10 +2,25 @@ $def with(form, total)
 <h1>发送邮件</h1>
 <div style="width: 200px; height: 10px; border: solid 1px #ccc; padding: 1px;">
 <div id="processbar" style="background-color: #90EE90; width: 0px; height: 10px;"></div>
+<br>
+<!--input style="background:transparent; border:none;" type="text" size="12" id="txt1" readonly="readonly"/-->
+<div class="input-prepend form-control spn2">
+    <span class="add-on">总数：</span>
+    <input class="form-control span1" id="all" type="text" readonly>
+    <span class="add-on">成功：</span>
+    <input class="form-control span1" id="succeed" type="text" readonly>
+    <span class="add-on">失败：</span>
+    <input class="form-control span1" id="failed" type="text" readonly>
 </div>
+</div>
+<br></br>
 
 <script type="text/javascript">
-        var mytimer = null;  var bar = 0;
+        var mytimer = null;
+        var bar = 0;
+        var all = 0;
+        var succeed = 0;
+        var failed = 0;
         xx = function(){
             jQuery.ajax({
                 type: "GET",
@@ -13,17 +28,28 @@ $def with(form, total)
                 async:false,
                 dataType:"html",
                 success: function (result) {
-                    //alert(parseInt(result/total*200))
-                    bar = parseInt(result/$:total*200)
-                    bar = result;
+                    var ret = eval('(' + result + ')');
+                    //alert(ret.succeed);
+                    //alert(parseInt($:total));
+                    succeed = parseInt(ret.succeed);
+                    failed = parseInt(ret.sent_count - ret.succeed) ;
+                    bar = parseInt(ret.succeed/$:total*200);
                 }
             });
             if (bar < 200) {
                 document.getElementById("processbar").style.width = bar + "px";
             }
+            document.getElementById("all").value=$:total;
+            document.getElementById("succeed").value=succeed;
+            document.getElementById("failed").value=failed;
         };
+
+        function setValues(){
+            var oTextbox1=document.getElementById("txt1");
+            oTextbox1.value="fitst textbox";
+        }
         function startbar() {
-            mytimer = window.setInterval("xx()", 1000);
+            mytimer = window.setInterval("xx()", 3000);
         }
         function pausebar() {
             window.clearInterval(mytimer);

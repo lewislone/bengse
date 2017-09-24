@@ -13,6 +13,7 @@ import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import utils.loadjson as loadjson
 import threading
+import json
 
 import os
 class return_num:
@@ -24,7 +25,8 @@ class return_num:
         else:
             data = {'sent_count': 0, 'succeed': 0}
         print data['sent_count'],data['succeed']
-        return data['sent_count']
+        #return data['sent_count']
+        return json.dumps(data)
 
 class Show:
     def __init__(self):
