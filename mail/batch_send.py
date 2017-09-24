@@ -174,7 +174,7 @@ class Batchsend:
                 break;
             account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
             receiver = self.__get_reciver(rcv_index)
-            account_type = settings.c['account_type'][account[-6:]]
+            account_type = settings.c['account_type'][account[1][-6:]]
             ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
             print 'account: ', account[1]
             print 'receiver: ', receiver[1]
