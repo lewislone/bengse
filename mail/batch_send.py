@@ -165,7 +165,9 @@ class Batchsend:
         #    last_account = ''
         accounts = self.__get_account()
         if len(accounts) == 0:
-            continue
+            print "fatch account failed , there is 0 account!!!!!!!!!!"
+            self.db.close()
+            return
         last_account = ''
         for rcv_index in rcv_indexs: #random get a receiver
             if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
@@ -198,7 +200,7 @@ class Batchsend:
             time.sleep(5)
             last_account = account[1]
 
-        self.db = dao.Dao()
+        self.db.close()
 
     def stop(self):
         os.remove(os.getcwd() + "/tmp/senderrunning")
