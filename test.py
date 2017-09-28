@@ -6,7 +6,6 @@ import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import mail.send as send
 import mail.template as template 
-from config import settings
 import DEBUG
 
 def sendtest():
@@ -41,23 +40,16 @@ def initDB():
 
 def clearDB():
     db = dao.Dao()
-    db.get_all_ip()
+    print db.get_all_ip()
     db.clear_table('ip')
     print "after clear"
-    db.get_all_ip()
+    print db.get_all_ip()
 
 def batchsend():
     title = u'xxoo'
     contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
     batchsend = batch_send.Batchsend(title, contain)
     batchsend.run()
-
-def loadjsonfile():
-    data = settings.c['db_name'][0]
-    loadjson.loadtojson(data, os.getcwd() + u"/tmp/test.json")
-    d = loadjson.loadfromjson(os.getcwd() + u"/tmp/test.json")
-    print d['name']
-    DEBUG.pd(d)
 
 def temp():
     with open('./templates/temp1.htm') as f:
@@ -90,6 +82,9 @@ if __name__ == "__main__":
     #initDB()
 
     clearDB()
+    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    c2s.csv2db(0)
+    c2s.close_db()
 
     #batchsend()
 
