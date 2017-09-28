@@ -39,6 +39,13 @@ def initDB():
     c2s.csv2db(6)
     c2s.close_db()
 
+def clearDB():
+    db = dao.Dao()
+    db.get_all_ip()
+    db.clear_table('ip')
+    print "after clear"
+    db.get_all_ip()
+
 def batchsend():
     title = u'xxoo'
     contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
@@ -82,9 +89,11 @@ if __name__ == "__main__":
 
     #initDB()
 
+    clearDB()
+
     #batchsend()
 
-    sendtest()
+    #sendtest()
 
     #loadjsonfile()
 
