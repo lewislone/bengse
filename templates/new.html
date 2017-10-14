@@ -33,7 +33,7 @@ $def with(form, total)
                     //alert(parseInt($:total));
                     succeed = parseInt(ret.succeed);
                     failed = parseInt(ret.sent_count - ret.succeed) ;
-                    bar = parseInt(ret.succeed/$:total*200);
+                    bar = parseInt(ret.sent_count/$:total*200);
                 }
             });
             if (bar < 200) {
