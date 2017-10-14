@@ -7,11 +7,16 @@ import mail.batch_send as batch_send
 import mail.send as send
 import mail.template as template 
 import DEBUG
+import mail.template as template
 
 def sendtest():
-    content = u'<html><body><h1>Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice </h1><br>---</br><p>send by <a href="http://www.python.org">suninrain</a>...</p></body></html>'
+    temp = template.Template('./templates/temp1.htm')
+    #content = u'<html><body><h1>Hi lll, Have you ever heard that the loveliest girls in the world live in my country? I long for finding a special person for serious relations or even family life </h1><br>---</br><p>send by <a href="http://www.fdaicid.com">fdsic</a>......</p></body></html>'
+    text = "Hi lll, Have you ever heard that the loveliest girls in the world live in my country? I long for finding a special person for serious relations     or even family life"
+    content = temp.get_html(text, 'jdic@qq.com')
+    print content
     subject = u'3Q'
-    mail = send.Mail('ym0048046@yeah.net', 'yueson', 'smtp.yeah.net', '192.168.1.8')
+    mail = send.Mail('danghuaizi60@163.com', 'yw16028', 'smtp.163.com', '10.0.0.3')
     mail.loginsmtp()
     mail.send_text('jdic@qq.com', 'lll', 'suninrain', content, 'html', subject)
     #mail.send_html_with_attachment(receiver, content, attachment_path):
@@ -81,14 +86,14 @@ if __name__ == "__main__":
 
     #initDB()
 
-    clearDB()
-    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
-    c2s.csv2db(0)
-    c2s.close_db()
+    #clearDB()
+    #c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    #c2s.csv2db(0)
+    #c2s.close_db()
 
     #batchsend()
 
-    #sendtest()
+    sendtest()
 
     #loadjsonfile()
 
