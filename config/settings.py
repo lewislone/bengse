@@ -144,13 +144,13 @@ c = {
                         },
                       ],
         'account_type': {
-                            'mil.ua': {
+                            'ail.ua': {
                                         'smtp': 'smtp.mail.ru',
                                         'max' : 3,
                                         'interval' : 100,
                                         'port': 587,
                                     },
-                            'mil.ru': {
+                            'ail.ru': {
                                         'smtp': 'smtp.mail.ru',
                                         'max' : 3,
                                         'interval' : 100,
