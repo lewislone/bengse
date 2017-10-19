@@ -12,13 +12,16 @@ import mail.template as template
 def sendtest():
     temp = template.Template('./templates/temp1.htm')
     #content = u'<html><body><h1>Hi lll, Have you ever heard that the loveliest girls in the world live in my country? I long for finding a special person for serious relations or even family life </h1><br>---</br><p>send by <a href="http://www.fdaicid.com">fdsic</a>......</p></body></html>'
-    text = "Hi lll, Have you ever heard that the loveliest girls in the world live in my country? I long for finding a special person for serious relations     or even family life"
-    content = temp.get_html(text, 'jdic@qq.com')
+    #text = u'Hi lll, 您获得了进入379442741VIP优惠总群资格, <a href="https://jq.qq.com/?_wv=1027&k=5fzqAx0" target="_blank" style="outline: none; cursor: pointer; color: rgb(30, 84, 148);">点我一键进群</a>'
+    text = u'Nearly a dozen years ago, a local contractor was building an underpass near my home. It was constructed by the open method, employing concrete piles driven into the soil with a diesel headframe. The operation usually has been started at 7 am and lasted until 10 pm. The uproar was such that it was impossible to remain at home. The work was scheduled for three years, continued four years, and finally, a charming 50 meters long 2.5 meters tall passageway emerged to the neighbors'
+    content = temp.get_html(text, '2402156431@qq.com')
     print content
-    subject = u'3Q'
-    mail = send.Mail('danghuaizi60@163.com', 'yw16028', 'smtp.163.com', '10.0.0.3')
+    subject = u'adjustments program'
+    mail = send.Mail('lawz7q5q44vid@mail.ua', 'Zz4igBe4Ze', 'smtp.mail.ru', '10.0.0.2', 587)
+    #mail = send.Mail('l5ahlxuvnfzdo@inbox.ru', 'cu0B4f40N', 'smtp.mail.ru', '10.0.0.2', 587)
+    #mail = send.Mail('eqnvrimpi437@mail.ru', 'gTGR1B5T4l46', 'smtp.mail.ru', '10.0.0.2', 587)
     mail.loginsmtp()
-    mail.send_text('jdic@qq.com', 'lll', 'suninrain', content, 'html', subject)
+    mail.send_text('2402156431@qq.com', 'suninrain', 'suninrain', content, 'html', subject)
     #mail.send_html_with_attachment(receiver, content, attachment_path):
 
 def initDB():

@@ -144,6 +144,18 @@ c = {
                         },
                       ],
         'account_type': {
+                            'mil.ua': {
+                                        'smtp': 'smtp.mail.ru',
+                                        'max' : 3,
+                                        'interval' : 100,
+                                        'port': 587,
+                                    },
+                            'mil.ru': {
+                                        'smtp': 'smtp.mail.ru',
+                                        'max' : 3,
+                                        'interval' : 100,
+                                        'port': 587,
+                                    },
                             'il.com': {
                                         'smtp': 'smtp.gmail.com',
                                         'max' : 3,

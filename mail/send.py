@@ -17,6 +17,7 @@ class Mail():
         self.from_addr = addr
         self.password = pw
         localhost = ip
+        print 'port = ', port
         self.server = smtplib.SMTP(ip, smpt, port, localhost)
         if port != 25:
            self.server.starttls()
