@@ -197,8 +197,8 @@ class Batchsend:
                 print 'sent_mail failed!!!'
             self.__save_count(ret)
             if last_account == account[1]:
-                time.sleep(account_type['interval']*10)
-            time.sleep(5)
+                time.sleep(account_type['interval'])
+            time.sleep(90)
             last_account = account[1]
 
         self.db.close()

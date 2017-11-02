@@ -147,7 +147,7 @@ c = {
                             'ail.ua': {
                                         'smtp': 'smtp.mail.ru',
                                         'max' : 3,
-                                        'interval' : 100,
+                                        'interval' : 300,
                                         'port': 587,
                                     },
                             'ail.ru': {
