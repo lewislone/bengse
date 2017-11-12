@@ -122,10 +122,10 @@ class Batchsend:
                 print 'connect to smtp server failed!!!!'
                 return -1
         ret = mail.loginsmtp()
+        self.__update_status('accounts', addr, ret)
         if ret:
             print 'login smtp failed!!!  %d'%ret
             mail.quit()
-            self.__update_status('accounts', addr, ret)
             return ret
         content = self.__get_contain(receiver[1])
         subject = self.title+' '+self.__get_subject()
@@ -198,7 +198,7 @@ class Batchsend:
             self.__save_count(ret)
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
-            time.sleep(90)
+            time.sleep(60)
             last_account = account[1]
 
         self.db.close()
