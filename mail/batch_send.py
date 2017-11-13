@@ -77,7 +77,7 @@ class Batchsend:
         return ip[0]
 
     def __update_status(self, type, key, code):
-        if type != 'accounts' or type != 'receivers' or type != 'ip':
+        if not (type == 'accounts' or type == 'receivers' or type == 'ip'):
             print 'unknown type'
             return
         if key not in self.status[type].keys():
