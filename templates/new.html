@@ -2,18 +2,20 @@ $def with(form, total)
 <h1>发送邮件</h1>
 <div style="width: 200px; height: 10px; border: solid 1px #ccc; padding: 1px;">
 <div id="processbar" style="background-color: #90EE90; width: 0px; height: 10px;"></div>
+</div>
 <br>
 <!--input style="background:transparent; border:none;" type="text" size="12" id="txt1" readonly="readonly"/-->
-<div class="input-prepend form-control spn2">
+<!--div class="row">
+<div class="input-prepend form-control">
     <span class="add-on">总数：</span>
-    <input class="form-control span1" id="all" type="text" readonly>
+    <input class="form-control span4" id="all" type="text" readonly>
     <span class="add-on">成功：</span>
-    <input class="form-control span1" id="succeed" type="text" readonly>
+    <input class="form-control span4" id="succeed" type="text" readonly>
     <span class="add-on">失败：</span>
-    <input class="form-control span1" id="failed" type="text" readonly>
+    <input class="form-control span4" id="failed" type="text" readonly>
 </div>
 </div>
-<br></br>
+<br></br-->
 
 <script type="text/javascript">
         var mytimer = null;
@@ -56,8 +58,22 @@ $def with(form, total)
         }
         window.onload=startbar;
 </script>
-<br></br>
-<form action="" method="POST">
+<form action="" method="POST" span12>
+<div class="input-prepend form-control">
+<div class="span3">
+<span class="add-on span1">总数：</span>
+<input class="form-control span2" id="all" type="text" readonly>
+</div>
+<div class="span3">
+<span class="add-on span1">成功：</span>
+<input class="form-control span2" id="succeed" type="text" readonly>
+</div>
+<div class="span3">
+<span class="add-on span1">失败：</span>
+<input class="form-control span2" id="failed" type="text" readonly>
+</div>
+</div>
+	<br></br>
     $:form.render_css()
     <script type="text/javascript">
         UE.getEditor('content');
