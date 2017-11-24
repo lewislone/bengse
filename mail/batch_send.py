@@ -76,20 +76,20 @@ class Batchsend:
         ip = self.db.fetchone_by_id('ip', id) 
         return ip[0]
 
-    def __update_status(self, type, key, code):
-        if not (type == 'accounts' or type == 'receivers' or type == 'ip'):
-            print 'unknown type'
+    def __update_status(self, type1, key, code):
+        if not (type1 == 'accounts' or type1 == 'receivers' or type1 == 'ip'):
+            print 'Unknown type: ', type1
             return
-        if key not in self.status[type].keys():
-            self.status[type][key] = {}
-            self.status[type][key]['ok'] = 0
-            self.status[type][key]['failed'] = 0
-            self.status[type][key]['count'] = 0
+        if key not in self.status[type1].keys():
+            self.status[type1][key] = {}
+            self.status[type1][key]['ok'] = 0
+            self.status[type1][key]['failed'] = 0
+            self.status[type1][key]['count'] = 0
         if code:
-            self.status[type][key]['failed'] += 1
+            self.status[type1][key]['failed'] += 1
         else:
-            self.status[type][key]['ok'] += 1
-        self.status[type][key]['count'] += 1
+            self.status[type1][key]['ok'] += 1
+        self.status[type1][key]['count'] += 1
 
     def sent_mail(self, ip, receiver, account, account_type):
         ret = 0
@@ -201,6 +201,8 @@ class Batchsend:
             time.sleep(60)
             last_account = account[1]
 
+        print "DONE"
+        os.remove(os.getcwd() + "/tmp/senderrunning")
         self.db.close()
 
     def stop(self):
