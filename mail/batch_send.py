@@ -200,7 +200,8 @@ class Batchsend:
             self.__save_count(ret)
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
-            time.sleep(60)
+            time.sleep(10)
+            logging.info(' %s, %s, %d, %s'%account[1], receiver[1], self.status['accounts'][account[1]]['count'], ip[1])
             last_account = account[1]
 
         logging.info("DONE")
