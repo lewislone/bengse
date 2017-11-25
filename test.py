@@ -8,6 +8,7 @@ import mail.send as send
 import mail.template as template 
 import DEBUG
 import mail.template as template
+import logging
 
 def sendtest():
     temp = template.Template('./templates/temp1.htm')
@@ -96,8 +97,19 @@ if __name__ == "__main__":
 
     #batchsend()
 
-    sendtest()
+    #sendtest()
 
     #loadjsonfile()
 
     #temp()
+
+
+    logging.basicConfig(level=logging.DEBUG,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S',
+                filename='myapp.log',
+                filemode='w')
+    
+    logging.debug('This is debug message')
+    logging.info('This is info message')
+    logging.warning('This is warning message')

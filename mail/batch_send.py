@@ -9,6 +9,7 @@ from config import settings
 import controllers.dao as dao
 import utils.loadjson as loadjson
 import template
+import logging
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
@@ -78,7 +79,7 @@ class Batchsend:
 
     def __update_status(self, type1, key, code):
         if not (type1 == 'accounts' or type1 == 'receivers' or type1 == 'ip'):
-            print 'Unknown type: ', type1
+            logging.warning('Unknown type: %ss'% type1)
             return
         if key not in self.status[type1].keys():
             self.status[type1][key] = {}
@@ -101,7 +102,7 @@ class Batchsend:
             pw = account[10]
         else:
             pw = account[2]
-        print 'passwd: ', pw
+        logging.info('passwd: %s'% pw)
         smpt = account[3]
         try:
             if account[9]:
@@ -111,7 +112,7 @@ class Batchsend:
                     mail = send.Mail(addr, pw, smpt, ip[1], account_type['port'])
                     self.db.update_last_by_key_value('account', 'account', addr, ip)
                 except:
-                    print 'connect to smtp server failed with new ip'
+                    logging.warning('connect to smtp server failed with new ip')
         except:
             try:
                 if account[9]:
@@ -119,12 +120,12 @@ class Batchsend:
                     self.db.update_last_by_key_value('account', 'account', addr, ip)
             except:
                 self.__update_status('accounts', addr, -1)
-                print 'connect to smtp server failed!!!!'
+                logging.warning('connect to smtp server failed!!!!')
                 return -1
         ret = mail.loginsmtp()
         self.__update_status('accounts', addr, ret)
         if ret:
-            print 'login smtp failed!!!  %d'%ret
+            logging.warning('login smtp failed!!!  %d'%ret)
             mail.quit()
             return ret
         content = self.__get_contain(receiver[1])
@@ -135,7 +136,7 @@ class Batchsend:
         ret = mail.send_text(receiver[1], toname, fromname, content, 'html', subject)
         self.__update_status('receivers', receiver[1], ret)
         if ret:
-            print 'send email failed!!!'
+            logging.warning('send email failed!!!')
         mail.quit()
         return ret
 
@@ -148,9 +149,10 @@ class Batchsend:
 
     def run(self):
         #init
-        print 'total ip row: ', self.db.total_row('ip')
-        print 'total accounts row: ', self.db.total_row('account')
-        print 'total receivers row: ', self.db.total_row('receiver')
+        logging.info('starting... ')
+        logging.info('total ip row: %s'%self.db.total_row('ip'))
+        logging.info('total accounts row: %s'% self.db.total_row('account'))
+        logging.info('total receivers row: %s'% self.db.total_row('receiver'))
         rcv_indexs = range(self.db.total_row('receiver'))
         random.shuffle(rcv_indexs)
         ip_indexs = range(self.db.total_row('ip'))
@@ -165,7 +167,7 @@ class Batchsend:
         #    last_account = ''
         accounts = self.__get_account()
         if len(accounts) == 0:
-            print "fatch account failed , there is 0 account!!!!!!!!!!"
+            logging.warning("fatch account failed , there is 0 account!!!!!!!!!!")
             self.db.close()
             return
         last_account = ''
@@ -176,38 +178,40 @@ class Batchsend:
             receiver = self.__get_reciver(rcv_index)
             account_type = settings.c['account_type'][account[1][-6:]]
             ip = self.__get_ip(ip_indexs[rcv_index%len(ip_indexs)]) #random get a ip
-            print 'account: ', account[1]
-            print 'receiver: ', receiver[1]
-            print 'ip: ', ip[1]
+            logging.info('account: %s'%account[1])
+            logging.info('receiver: %s'% receiver[1])
+            logging.info('ip: %s'% ip[1])
             if account[1] in self.status['accounts'].keys():
-                print '###count: ', self.status['accounts'][account[1]]['count']
+                logging.info('###count: %d'% self.status['accounts'][account[1]]['count'])
                 if self.status['accounts'][account[1]]['count'] > account_type['max']:
-                    print account[1], ' sent too many email ', account_type['max']
+                    logging.warning('%s sent too many email %d'% (account[1], account_type['max']))
                     continue
             try:
                 ret = self.sent_mail(ip, receiver, account, account_type)
                 if ret < 0:
                     account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
-                    print 'account: ', account[1]
-                    print 'receiver: ', receiver[1]
-                    print 'ip: ', ip[1]
+                    logging.info('account: %s'%account[1])
+                    logging.info('receiver: %s'% receiver[1])
+                    logging.info('ip: %s'% ip[1])
                     ret = self.sent_mail(ip, receiver, account, account_type)
             except:
                 ret = -1
-                print 'sent_mail failed!!!'
+                logging.warning('sent_mail failed!!!')
             self.__save_count(ret)
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
             time.sleep(60)
             last_account = account[1]
 
-        print "DONE"
-        os.remove(os.getcwd() + "/tmp/senderrunning")
+        logging.info("DONE")
+        if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
+            os.remove(os.getcwd() + "/tmp/senderrunning")
         self.db.close()
 
     def stop(self):
-        os.remove(os.getcwd() + "/tmp/senderrunning")
-        print("stop...")
+        if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
+            os.remove(os.getcwd() + "/tmp/senderrunning")
+        logging.info("stop...")
 
 if __name__ == "__main__":
 

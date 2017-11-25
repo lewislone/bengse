@@ -192,7 +192,8 @@ class New:
         #        data['sent_count'] = data['sent_count'] + 1
         #        data['succeed'] = data['succeed'] + 1
         #        loadjson.loadtojson(data, path)
-        os.remove(os.getcwd() + "/tmp/senderrunning")
+        if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
+            os.remove(os.getcwd() + "/tmp/senderrunning")
         print "end batch sent...."
 
     def GET(self):
@@ -202,7 +203,8 @@ class New:
         data = web.input()
         if 'stop' in data:
             print 'stop send mail'
-            os.remove(os.getcwd() + "/tmp/senderrunning")
+            if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
+                os.remove(os.getcwd() + "/tmp/senderrunning")
 
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))

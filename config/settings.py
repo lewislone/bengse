@@ -3,6 +3,7 @@ import os
 import sys
 sys.path.insert(0,'../lib/webpy')
 import web
+import logging
 
 app_root = os.path.dirname(__file__)
 templates_root = os.path.join(app_root, '../templates')
@@ -20,6 +21,12 @@ config = web.storage(
 web.template.Template.globals['config'] = config
 web.template.Template.globals['render'] = render
 
+log = logging
+logging.basicConfig(level=logging.INFO,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S',
+                filename='myapp.log',
+                filemode='w')
 
 c = {
         'debug'     : True,
