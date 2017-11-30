@@ -1,5 +1,8 @@
 # coding: UTF-8
 import os
+import sys
+sys.path.insert(0,'./lib/webpy')
+import web
 import utils.loadjson as loadjson
 import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite
@@ -90,10 +93,10 @@ if __name__ == "__main__":
 
     #initDB()
 
-    #clearDB()
-    #c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
-    #c2s.csv2db(0)
-    #c2s.close_db()
+    clearDB()
+    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    c2s.csv2db(0)
+    c2s.close_db()
 
     #batchsend()
 
@@ -104,12 +107,12 @@ if __name__ == "__main__":
     #temp()
 
 
-    logging.basicConfig(level=logging.DEBUG,
-                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-                datefmt='%a, %d %b %Y %H:%M:%S',
-                filename='myapp.log',
-                filemode='w')
-    
-    logging.debug('This is debug message')
-    logging.info('This is info message')
-    logging.warning('This is warning message')
+    #logging.basicConfig(level=logging.DEBUG,
+    #            format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+    #            datefmt='%a, %d %b %Y %H:%M:%S',
+    #            filename='myapp.log',
+    #            filemode='w')
+    #
+    #logging.debug('This is debug message')
+    #logging.info('This is info message')
+    #logging.warning('This is warning message')
