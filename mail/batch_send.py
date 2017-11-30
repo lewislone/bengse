@@ -79,7 +79,7 @@ class Batchsend:
 
     def __update_status(self, type1, key, code):
         if not (type1 == 'accounts' or type1 == 'receivers' or type1 == 'ip'):
-            logging.warning('Unknown type: %ss'% type1)
+            logging.warning('Unknown type: %s'% type1)
             return
         if key not in self.status[type1].keys():
             self.status[type1][key] = {}
@@ -91,6 +91,7 @@ class Batchsend:
         else:
             self.status[type1][key]['ok'] += 1
         self.status[type1][key]['count'] += 1
+        logging.warning('update: %s: key: %s'% type1, key)
 
     def sent_mail(self, ip, receiver, account, account_type):
         ret = 0
@@ -201,7 +202,10 @@ class Batchsend:
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
             time.sleep(10)
-            logging.info(' %s, %s, %d, %s'%(account[1], receiver[1], self.status['accounts'][account[1]]['count'], ip[1]))
+            if account[1] in self.status['accounts'].keys():
+                logging.info('%s, %s, %d, %s'%(account[1], receiver[1], self.status['accounts'][account[1]]['count'], ip[1]))
+            else:
+                logging.info('%s, %s, %s'%(account[1], receiver[1], ip[1]))
             last_account = account[1]
 
         logging.info("DONE")
