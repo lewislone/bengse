@@ -153,7 +153,7 @@ c = {
         'account_type': {
                             'ail.ua': {
                                         'smtp': 'smtp.mail.ru',
-                                        'max' : 3,
+                                        'max' : 10,
                                         'interval' : 300,
                                         'port': 587,
                                     },

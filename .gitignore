@@ -4,3 +4,6 @@
 *.csv
 *.csv.*
 .DS_Store
+myapp.log
+nohup.out
+tmp/tmp.json

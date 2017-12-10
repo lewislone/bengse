@@ -91,7 +91,7 @@ class Batchsend:
         else:
             self.status[type1][key]['ok'] += 1
         self.status[type1][key]['count'] += 1
-        logging.warning('update: %s: key: %s'% type1, key)
+        logging.warning('update: %s: key: %s'%(type1, key))
 
     def sent_mail(self, ip, receiver, account, account_type):
         ret = 0
@@ -133,6 +133,7 @@ class Batchsend:
         subject = self.title+' '+self.__get_subject()
         toname = self.__get_toname()
         fromname = self.__get_fromname()
+        logging.info('subject: %s, toname:%s, fromname:%s'%(subject, toname, fromname))
         #mail.send_html_with_attachment(receiver, content, attachment_path):
         ret = mail.send_text(receiver[1], toname, fromname, content, 'html', subject)
         self.__update_status('receivers', receiver[1], ret)
@@ -184,7 +185,7 @@ class Batchsend:
             logging.info('ip: %s'% ip[1])
             if account[1] in self.status['accounts'].keys():
                 logging.info('###count: %d'% self.status['accounts'][account[1]]['count'])
-                if self.status['accounts'][account[1]]['count'] > account_type['max']:
+                if self.status['accounts'][account[1]]['count'] >= account_type['max']:
                     logging.warning('%s sent too many email %d'% (account[1], account_type['max']))
                     continue
             try:
@@ -201,7 +202,7 @@ class Batchsend:
             self.__save_count(ret)
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
-            time.sleep(10)
+            time.sleep(5)
             if account[1] in self.status['accounts'].keys():
                 logging.info('%s, %s, %d, %s'%(account[1], receiver[1], self.status['accounts'][account[1]]['count'], ip[1]))
             else:
