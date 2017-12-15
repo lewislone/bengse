@@ -8,9 +8,9 @@ import controllers.dao as dao
 import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import mail.send as send
+import mail.contain as contain
 import mail.template as template 
 import DEBUG
-import mail.template as template
 import logging
 
 def sendtest():
@@ -93,10 +93,10 @@ if __name__ == "__main__":
 
     #initDB()
 
-    clearDB()
-    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
-    c2s.csv2db(0)
-    c2s.close_db()
+    #clearDB()
+    #c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    #c2s.csv2db(0)
+    #c2s.close_db()
 
     #batchsend()
 
@@ -105,6 +105,9 @@ if __name__ == "__main__":
     #loadjsonfile()
 
     #temp()
+
+    cn = contain.Contain()
+    cn.get_html()
 
 
     #logging.basicConfig(level=logging.DEBUG,
