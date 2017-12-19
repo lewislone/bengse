@@ -38,6 +38,7 @@ urls = (
     '/ue_getRemoteImage',   'webpyueditor.Ue_GetRemoteImage',
     '/ue_getMovie',         'webpyueditor.Ue_GetMovie',
     '/ue_imageManager',     'webpyueditor.Ue_ImageManager',
+    '/test',        pre_fix + 'main.Test',
 
 #    '/(?:img|js|css)/.*', pre_fix + 'public.public',
 )

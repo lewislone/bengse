@@ -28,6 +28,13 @@ class return_num:
         #return data['sent_count']
         return json.dumps(data)
 
+class Test:
+    def __init__(self):
+        self.render = settings.render
+
+    def GET(self):
+        return self.render.temp2()
+
 class Show:
     def __init__(self):
         self.render = settings.render
