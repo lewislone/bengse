@@ -18,9 +18,10 @@ class Contain:
         return 'Temp'+str(index)
         
 
-    def get_html(self):
+    def get_html(self, contain, receiver):
         tmp = self.__fetch_one_temp()
         module = __import__('temp')
+        #print module.get_random_ip()
         obj = getattr(module, tmp)
         handle = obj()
-        print handle.format_html("test contain", 'xx@qq.com')
+        print handle.format_html(contain, receiver)

@@ -8,16 +8,17 @@ from random import choice
 from config import settings
 import controllers.dao as dao
 import utils.loadjson as loadjson
-import template
+import contain
 import logging
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
         self.db = dao.Dao()
         self.db.init_tables()
+        temp_module = __import__('temp')
         self.content = content
+        self.cn = contain.Contain()
         self.title = title
-        self.temp = template.Template('./templates/temp1.htm')
         jsonfile = os.getcwd() + u"/tmp/status.json"
         if os.path.exists(jsonfile):
             self.status = loadjson.loadfromjson(os.getcwd() + u"/tmp/status.json")
@@ -47,16 +48,16 @@ class Batchsend:
         loadjson.loadtojson(data, path)
 
     def __get_contain(self, receiver):
-        return self.temp.get_html(self.content, receiver)
+        return self.cn.get_html(self.content, receiver)
 
     def __get_subject(self):
-        return self.temp.get_subject()
+        return self.temp_module.get_subject(self.db)
 
     def __get_toname(self):
-        return self.temp.get_toname()
+        return self.temp_module.get_toname(self.db)
 
     def __get_fromname(self):
-        return self.temp.get_fromname()
+        return self.temp_module.get_fromname(self.db)
 
     def __get_reciver(self, rcv_index):
         if rcv_index == 0:
