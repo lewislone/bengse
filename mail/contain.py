@@ -24,4 +24,4 @@ class Contain:
         #print module.get_random_ip()
         obj = getattr(module, tmp)
         handle = obj()
-        print handle.format_html(contain, receiver)
+        return handle.format_html(contain, receiver)

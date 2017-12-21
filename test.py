@@ -16,12 +16,14 @@ import logging
 def sendtest():
     temp = template.Template('./templates/temp1.htm')
     #content = u'<html><body><h1>Hi lll, Have you ever heard that the loveliest girls in the world live in my country? I long for finding a special person for serious relations or even family life </h1><br>---</br><p>send by <a href="http://www.fdaicid.com">fdsic</a>......</p></body></html>'
-    #text = u'Hi lll, 您获得了进入379442741VIP优惠总群资格, <a href="https://jq.qq.com/?_wv=1027&k=5fzqAx0" target="_blank" style="outline: none; cursor: pointer; color: rgb(30, 84, 148);">点我一键进群</a>'
-    text = u'Nearly a dozen years ago, a local contractor was building an underpass near my home. It was constructed by the open method, employing concrete piles driven into the soil with a diesel headframe. The operation usually has been started at 7 am and lasted until 10 pm. The uproar was such that it was impossible to remain at home. The work was scheduled for three years, continued four years, and finally, a charming 50 meters long 2.5 meters tall passageway emerged to the neighbors'
-    content = temp.get_html(text, '2402156431@qq.com')
+    text = u'Hi lll, 您获得了进入379442741VIP优惠总群资格, <a href="https://jq.qq.com/?_wv=1027&k=5fzqAx0" target="_blank" style="outline: none; cursor: pointer; color: rgb(30, 84, 148);">点我一键进群</a>'
+    #text = u'Nearly a dozen years ago, a local contractor was building an underpass near my home. It was constructed by the open method, employing concrete piles driven into the soil with a diesel headframe. The operation usually has been started at 7 am and lasted until 10 pm. The uproar was such that it was impossible to remain at home. The work was scheduled for three years, continued four years, and finally, a charming 50 meters long 2.5 meters tall passageway emerged to the neighbors'
+    #content = temp.get_html(text, '2402156431@qq.com')
+    cn = contain.Contain()
+    content = cn.get_html(text, '2402156431@qq.com')
     print content
-    subject = u'adjustments program'
-    mail = send.Mail('lawz7q5q44vid@mail.ua', 'Zz4igBe4Ze', 'smtp.mail.ru', '10.0.0.2', 587)
+    subject = u'love paradise '
+    mail = send.Mail('lawz7q5q44vid@mail.ua', 'Zz4igBe4Ze', 'smtp.mail.ru', '108.187.61.74', 587)
     #mail = send.Mail('l5ahlxuvnfzdo@inbox.ru', 'cu0B4f40N', 'smtp.mail.ru', '10.0.0.2', 587)
     #mail = send.Mail('eqnvrimpi437@mail.ru', 'gTGR1B5T4l46', 'smtp.mail.ru', '10.0.0.2', 587)
     mail.loginsmtp()
@@ -100,14 +102,14 @@ if __name__ == "__main__":
 
     #batchsend()
 
-    #sendtest()
+    sendtest()
 
     #loadjsonfile()
 
     #temp()
 
-    cn = contain.Contain()
-    cn.get_html("this is contain", 'xxx@qq.com')
+    #cn = contain.Contain()
+    #cn.get_html("this is contain", 'xxx@qq.com')
 
 
     #logging.basicConfig(level=logging.DEBUG,
