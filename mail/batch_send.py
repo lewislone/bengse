@@ -9,13 +9,14 @@ from config import settings
 import controllers.dao as dao
 import utils.loadjson as loadjson
 import contain
+import temp as temp_module
 import logging
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
         self.db = dao.Dao()
         self.db.init_tables()
-        temp_module = __import__('temp')
+        #temp_module = __import__('temp')
         self.content = content
         self.cn = contain.Contain()
         self.title = title
@@ -51,13 +52,13 @@ class Batchsend:
         return self.cn.get_html(self.content, receiver)
 
     def __get_subject(self):
-        return self.temp_module.get_subject(self.db)
+        return temp_module.get_subject(self.db)
 
     def __get_toname(self):
-        return self.temp_module.get_toname(self.db)
+        return temp_module.get_toname(self.db)
 
     def __get_fromname(self):
-        return self.temp_module.get_fromname(self.db)
+        return temp_module.get_fromname(self.db)
 
     def __get_reciver(self, rcv_index):
         if rcv_index == 0:
@@ -193,13 +194,14 @@ class Batchsend:
                 ret = self.sent_mail(ip, receiver, account, account_type)
                 if ret < 0:
                     account = self.__get_a_account(accounts)#random get a account belong account_type['smtp']
-                    logging.info('account: %s'%account[1])
-                    logging.info('receiver: %s'% receiver[1])
-                    logging.info('ip: %s'% ip[1])
+                    logging.info('account2: %s'%account[1])
+                    logging.info('receiver2: %s'% receiver[1])
+                    logging.info('ip2: %s'% ip[1])
                     ret = self.sent_mail(ip, receiver, account, account_type)
             except:
                 ret = -1
                 logging.warning('sent_mail failed!!!')
+
             self.__save_count(ret)
             if last_account == account[1]:
                 time.sleep(account_type['interval'])
