@@ -144,7 +144,8 @@ class Temp0:
         quote = get_quote(self.db)
         line = get_line()
         hi = u'亲爱的【%s】 您好：'%receiver[:receiver.index('@')]
-        html = temp%(hi, contain, line, quote, fromname)
+        t = time.asctime(time.localtime(time.time()))
+        html = temp%(hi, contain, line, quote, fromname, t)
         return insert_comment(html, self.db)
         #return temp%(hi, contain, line, quote, homeurl, fromname)
 
@@ -177,7 +178,7 @@ class Temp2:
         self.tempfile = os.getcwd() + u"/templates/temp4.htm"
         self.db = dao.Dao()
 
-    #parameter: line,quote,line,hi,contain,line,quote,line
+    #parameter: line,quote,line,hi,contain,line,quote,line,time
     def format_html(self, contain, receiver):
         print 'temp2 start...'
         temp = get_temp(self.tempfile)
@@ -190,6 +191,7 @@ class Temp2:
         line1 = get_line()
         line2 = get_line()
         hi = u'%s 您好：'%receiver[:receiver.index('@')]
-        html = temp%(line1, quote1, line1, hi, contain, line2, quote2, line2)
+        t = time.asctime(time.localtime(time.time()))
+        html = temp%(line1, quote1, line1, hi, contain, line2, quote2, line2, t)
         return insert_comment(html, self.db)
         #return temp%(hi, contain, line, quote, homeurl, fromname)
