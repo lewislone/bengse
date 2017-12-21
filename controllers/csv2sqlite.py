@@ -42,6 +42,7 @@ class csv2sqlite:
 
     def csv2db(self, type):
         fd = open(self.csvfile, 'rb')
+        self.db.db_transaction()
         for row in self.__readFile():
             #print row.keys()
             #print row.values()
@@ -71,6 +72,7 @@ class csv2sqlite:
             if type is 0: #ip
                 new = {row.keys()[0]:row.values()[0]}
                 self.db.insertone('ip', new)
+        self.db.db_commit()
         fd.close()
 
     def close_db(self):

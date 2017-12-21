@@ -12,6 +12,10 @@ import mail.contain as contain
 import mail.template as template 
 import DEBUG
 import logging
+import time
+import socket
+import struct
+import random
 
 def sendtest():
     temp = template.Template('./templates/temp1.htm')
@@ -59,6 +63,14 @@ def clearDB():
     print "after clear"
     print db.get_all_ip()
 
+def clearDB2():
+    db = dao.Dao()
+    print db.get_all_account()
+    db.clear_table('account')
+    print "after clear"
+    print db.get_all_account()
+
+
 def batchsend():
     title = u'xxoo'
     contain = u'Hi lll, sorry, this attachment is ok, 3Q for you help, and your ice'
@@ -100,6 +112,25 @@ if __name__ == "__main__":
     #c2s.csv2db(0)
     #c2s.close_db()
 
+    t0 = time.time()
+    clearDB()
+    new = {'addr': '144.117.143.172'}
+    db = dao.Dao()
+    db.insertone('ip', new)
+    clearDB()
+    t1 = time.time()
+    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    c2s.csv2db(0)
+    t2 = time.time()
+    print t1-t0
+    print t2-t1
+    c2s.close_db()
+
+    #count = 10000
+    #while count > 0:
+    #    print socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
+    #    count = count - 1
+
     #batchsend()
 
     #sendtest()
@@ -108,8 +139,8 @@ if __name__ == "__main__":
 
     #temp()
 
-    cn = contain.Contain()
-    print cn.get_html("this is contain", 'xxx@qq.com')
+    #cn = contain.Contain()
+    #print cn.get_html("this is contain", 'xxx@qq.com')
 
 
     #logging.basicConfig(level=logging.DEBUG,

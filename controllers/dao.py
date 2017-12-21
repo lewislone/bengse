@@ -72,7 +72,7 @@ class Dao:
             self.SQLiteDBfileName = dbPath
         else:
             self.SQLiteDBfileName = settings.c['db_url']
-        self.conn = sqlite3.connect(self.SQLiteDBfileName)
+        self.conn = sqlite3.connect(self.SQLiteDBfileName, isolation_level=None)
         self.cursor = self.conn.cursor()
 
     def __insertRow(self, tableName, rowDict):
@@ -117,7 +117,7 @@ class Dao:
             try:
                 self.cursor.execute(sql)
                 re = self.cursor.fetchall()
-                print 'fetch: ', len(re)
+                #print 'fetch: ', len(re)
             except:
                 print 'fatchone failed:%s'%sql
                 re = ''
@@ -323,10 +323,10 @@ class Dao:
         tmp = ['"'+v.strip().strip('"')+'"' for v in row.values()]
         sql = 'INSERT INTO %s ('%table + ','.join(row.keys()) + ') values (' + ', '.join(tmp) + ')'
         #print 'insert %s: %s'%(table, tmp)
-        print 'insert %s'%(table)
+        #print 'insert %s'%(table)
         try:
             self.cursor.execute(sql)
-            self.conn.commit()
+            #self.conn.commit()
         except:
             print 'insert failed' 
 
@@ -395,6 +395,12 @@ class Dao:
                 print 'init db: %s failed'%settings.c['db_name'][i]['sql']
 
         self.conn.commit()
+
+    def db_transaction(self):
+        self.cursor.execute("BEGIN TRANSACTION")
+
+    def db_commit(self):
+        self.cursor.execute("COMMIT")
 
     def close(self):
         self.conn.close()
