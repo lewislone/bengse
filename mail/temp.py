@@ -8,7 +8,7 @@ import random
 from random import choice
 import controllers.dao as dao
 
-line = [u'TTTTTTTTTT', u'++++++++++', u'-+-+-+-+-+-', u'=-=-=-=-=-=', u'-------', u'=======', u'_______', u'........', u'********', u'#########', u'````````', u'~~~~~~~~~~', u'.....']
+line = [u'^^^^^^^^^^^', u'!!!!!!!!!!', u'~~~~~~~~', u'EEEEEEEEEEE', u'IIIIIIIIIII', u'iiiiiiiiiiiiii', u'ooooooooooooooo', u'eeeeeeeeeeeeeeeeee', u'HHHHHHHHHHHHHHHHH', u'llllllllllllll', u'AAAAAAAAAAAAAAAAAAA', u'TTTTTTTTTT', u'++++++++++', u'-+-+-+-+-+-', u'=-=-=-=-=-=', u'-----------', u'============', u'___________', u'............', u'*************', u'############', u'````````', u'~~~~~~~~~~', u'.....']
 country_code = [u'CN', u'JP', u'US', u'KR', u'IN', u'GR', u'GB', u'FR', u'ES', u'DE', u'BY', u'RU', u'SG', u'IT']
 
 def get_temp(tempfile):
@@ -75,7 +75,7 @@ def insert_comment(old_html, db):
     count = old_html.count('>')
     index = random.randint(0, count)
     index = len(old_html.split('>', index)[-1])
-    html = old_html[:-index] + "<br>" + old_html[-index:]
+    html = old_html[:-index] + "<a hidden>" + get_quote(db) + "</a>" + old_html[-index:]
 
     count = html.count('>')
     index = random.randint(0, count)
@@ -85,12 +85,17 @@ def insert_comment(old_html, db):
     count = html.count('>')
     index = random.randint(0, count)
     index = len(html.split('>', index)[-1])
-    html = html[:-index] + '<span style="visibility:hidden">' + get_quote(db) + get_quote(db) + "</span>" + html[-index:]
+    html = html[:-index] + "<a hidden>" + get_toname(db) + "</a>" + html[-index:]
 
     count = html.count('>')
     index = random.randint(0, count)
     index = len(html.split('>', index)[-1])
-    html = html[:-index] + '<span style="visibility:hidden">' + get_quote(db) + "</span>" + html[-index:]
+    html = html[:-index] + '<span hidden>' + get_quote(db) + get_quote(db) + "</span>" + html[-index:]
+
+    count = html.count('>')
+    index = random.randint(0, count)
+    index = len(html.split('>', index)[-1])
+    html = html[:-index] + '<span hidden>' + get_quote(db) + "</span>" + html[-index:]
 
     count = html.count('>')
     index = random.randint(0, count)
@@ -110,6 +115,11 @@ def insert_comment(old_html, db):
     count = html.count('>')
     index = random.randint(0, count)
     index = len(html.split('>', index)[-1])
+    html = html[:-index] + '<div style="display:none;">' + get_quote(db) + "</div>" + html[-index:]
+
+    count = html.count('>')
+    index = random.randint(0, count)
+    index = len(html.split('>', index)[-1])
     html = html[:-index] + '<div>' + "</div>" + html[-index:]
 
     count = html.count('>')
@@ -120,7 +130,6 @@ def insert_comment(old_html, db):
 
 class Temp0:
     def __init__(self):
-        print "Temp0 init..."
         self.tempfile = os.getcwd() + u"/templates/temp1.htm"
         self.db = dao.Dao()
 
@@ -135,13 +144,12 @@ class Temp0:
         quote = get_quote(self.db)
         line = get_line()
         hi = u'亲爱的【%s】 您好：'%receiver[:receiver.index('@')]
-        html = temp%(hi, contain, line, quote, homeurl, fromname)
+        html = temp%(hi, contain, line, quote, fromname)
         return insert_comment(html, self.db)
         #return temp%(hi, contain, line, quote, homeurl, fromname)
 
 class Temp1:
     def __init__(self):
-        print "Temp1 init..."
         id = get_random_int(10000)%2 + 2 
         self.tempfile = os.getcwd() + u"/templates/temp%d.htm"%id
         self.db = dao.Dao()
@@ -163,3 +171,25 @@ class Temp1:
         country = get_random_country()
         print country
         return html%(receiver, inject, code, token, ip, country, token2)
+
+class Temp2:
+    def __init__(self):
+        self.tempfile = os.getcwd() + u"/templates/temp4.htm"
+        self.db = dao.Dao()
+
+    #parameter: line,quote,line,hi,contain,line,quote,line
+    def format_html(self, contain, receiver):
+        print 'temp2 start...'
+        temp = get_temp(self.tempfile)
+        #print temp
+        name = get_fromname(self.db)
+        #contain = u'Hi %s, sorry, this quote si for you, thank for you help'%name
+        fromname = get_fromname(self.db)
+        quote1 = get_quote(self.db)
+        quote2 = get_quote(self.db)
+        line1 = get_line()
+        line2 = get_line()
+        hi = u'%s 您好：'%receiver[:receiver.index('@')]
+        html = temp%(line1, quote1, line1, hi, contain, line2, quote2, line2)
+        return insert_comment(html, self.db)
+        #return temp%(hi, contain, line, quote, homeurl, fromname)

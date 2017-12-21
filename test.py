@@ -102,14 +102,14 @@ if __name__ == "__main__":
 
     #batchsend()
 
-    sendtest()
+    #sendtest()
 
     #loadjsonfile()
 
     #temp()
 
-    #cn = contain.Contain()
-    #cn.get_html("this is contain", 'xxx@qq.com')
+    cn = contain.Contain()
+    print cn.get_html("this is contain", 'xxx@qq.com')
 
 
     #logging.basicConfig(level=logging.DEBUG,
