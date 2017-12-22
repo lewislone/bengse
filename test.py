@@ -112,19 +112,24 @@ if __name__ == "__main__":
     #c2s.csv2db(0)
     #c2s.close_db()
 
-    t0 = time.time()
-    clearDB()
-    new = {'addr': '144.117.143.172'}
+    #t0 = time.time()
+    #clearDB()
+    #new = {'addr': '144.117.143.172'}
+    #db = dao.Dao()
+    #db.insertone('ip', new)
+    #clearDB()
+    #t1 = time.time()
+    #c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
+    #c2s.csv2db(0)
+    #t2 = time.time()
+    #print t1-t0
+    #print t2-t1
+    #c2s.close_db()
+
     db = dao.Dao()
-    db.insertone('ip', new)
-    clearDB()
-    t1 = time.time()
-    c2s = csv2sqlite.csv2sqlite('./tmp/ip.csv')
-    c2s.csv2db(0)
-    t2 = time.time()
-    print t1-t0
-    print t2-t1
-    c2s.close_db()
+    print db.get_quote(10)
+    print len(db.get_quote(199))
+    print db.total_row('quotes')
 
     #count = 10000
     #while count > 0:

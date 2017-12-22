@@ -14,6 +14,7 @@ import mail.batch_send as batch_send
 import utils.loadjson as loadjson
 import threading
 import json
+import traceback
 
 import os
 class return_num:
@@ -41,11 +42,16 @@ class Show:
         self.db = dao.Dao()
         self.db.init_tables()
         self.datas = {}
-        self.datas['account'] = self.db.get_all_account() 
-        self.datas['receiver'] = self.db.get_all_receiver()
-        self.datas['name'] = self.db.get_all_name()
-        self.datas['title'] = self.db.get_all_title()
-        self.datas['quote'] = self.db.get_all_quote()
+        self.datas['account'] = self.db.get_num_account(100) 
+        self.datas['accountlen'] = self.db.total_row('account') 
+        self.datas['receiver'] = self.db.get_data('receiver', 100)
+        self.datas['receiverlen'] = self.db.total_row('receiver') 
+        self.datas['name'] = self.db.get_data('names', 100)
+        self.datas['namelen'] = self.db.total_row('names')
+        self.datas['title'] = self.db.get_data('subjects', 100)
+        self.datas['titlelen'] = self.db.total_row('subjects')
+        self.datas['quote'] = self.db.get_data('quotes', 100)
+        self.datas['quotelen'] = self.db.total_row('quotes')
         self.tmpfiledir = '/tmp'
 
     def __store_file(self, field_storage, filename):
@@ -63,6 +69,7 @@ class Show:
             return 1
         except:
             print "c2s error..."
+            traceback.print_exc()
             return 0
 
     def GET(self):
@@ -99,22 +106,27 @@ class Show:
             if data['account'] and (data['passwd'] or data['idcode']):
                 self.db.insertone('account', {'account':data['account'], 'passwd':data['passwd'], 'idcode':data['idcode']})
                 self.datas['account'].append(data['account']+', '+data['passwd']+', '+data['idcode'])
+                self.datas['accountlen'] = self.db.total_row('account')
         if "addreceiver" in data:
             print "add receiver: ", data['receiver']
             self.db.insertone('receiver', {'email':data['receiver']})
             self.datas['receiver'].append(data['receiver'])
+            self.datas['receiverlen'] = self.db.total_row('receiver')
         if "addname" in data:
             print "add name: ", data['name']
             self.db.insertone('names', {'name':data['name']})
             self.datas['name'].append(data['name'])
+            self.datas['namelen'] = self.db.total_row('names')
         if "addtitle" in data:
             print "add title: ", data['title']
             self.db.insertone('subjects', {'subject':data['title']})
             self.datas['title'].append(data['title'])
+            self.datas['titlelen'] = self.db.total_row('subjects')
         if "addquote" in data:
             print "add quote: ", data['quote']
             self.db.insertone('quotes', {'quote':data['quote']})
             self.datas['quote'].append(data['quote'])
+            self.datas['quotelen'] = self.db.total_row('quotes')
         if "addrandom" in data:
             print "add random: ", data['random']
             self.db.insertone('randoms', {'random':data['random']})
@@ -123,6 +135,7 @@ class Show:
             print "add ip: ", data['ip']
             self.db.insertone('ip', {'addr':data['ip']})
             self.datas['ip'].append(data['ip'])
+            self.datas['iplen'] = self.db.total_row('ip')
 
         try:
           if 'accountlist' in data and data.accountlist.filename:
@@ -136,25 +149,30 @@ class Show:
               self.__store_file(data.receiverlist, 'receiver.csv')
               if self.__to_db(1, self.tmpfiledir + '/receiver.csv'):
                   shutil.move(self.tmpfiledir + '/receiver.csv', './tmp/receiver.csv.'+time.asctime())
-                  self.datas['receiver'] = self.db.get_all_receiver() 
+                  self.datas['receiver'] = self.db.get_data('receiver', 100)
+                  self.datas['receiverlen'] = self.db.total_row('receiver') 
           if 'quotelist' in data and data.quotelist.filename:
               print 'in quotelist'
               self.__store_file(data.quotelist, 'quote.csv')
               if self.__to_db(6, self.tmpfiledir + '/quote.csv'):
                   shutil.move(self.tmpfiledir + '/quote.csv', './tmp/quote.csv.'+time.asctime())
-                  self.datas['quote'] = self.db.get_all_quote()
+                  self.datas['quote'] = self.db.get_data('quotes', 100)
+                  self.datas['quotelen'] = self.db.total_row('quotes')
           if 'namelist' in data and data.namelist.filename:
               print 'in namelist'
               self.__store_file(data.namelist, 'name.csv')
               if self.__to_db(3, self.tmpfiledir + '/name.csv'):
                   shutil.move(self.tmpfiledir + '/name.csv', './tmp/name.csv.'+time.asctime())
-                  self.datas['name'] = self.db.get_all_name()
+                  self.datas['name'] = self.db.get_data('names', 100)
+                  self.datas['namelen'] = self.db.total_row('names')
           if 'titlelist' in data and data.titlelist.filename:
               print 'in titlelist'
               self.__store_file(data.titlelist, 'title.csv')
               if self.__to_db(4, self.tmpfiledir + '/title.csv'):
                   shutil.move(self.tmpfiledir + '/title.csv', './tmp/title.csv.'+time.asctime())
                   self.datas['title'] = self.db.get_all_title()
+                  self.datas['title'] = self.db.get_data('subjects', 100)
+                  self.datas['titlelen'] = self.db.total_row('subjects')
         except:
           pass
 

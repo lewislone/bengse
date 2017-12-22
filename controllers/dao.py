@@ -112,6 +112,14 @@ class Dao:
             #print len(re), re
             return re
 
+    def fetch(self, table, num):
+        if table is not None and table != '':
+            sql = 'select * from %s limit %s' % (table,num)
+            self.cursor.execute(sql)
+            re = self.cursor.fetchall()
+            #print len(re), re
+            return re
+
     def fetchone(self, sql):
         if sql is not None and sql != '':
             try:
@@ -328,7 +336,7 @@ class Dao:
             self.cursor.execute(sql)
             #self.conn.commit()
         except:
-            print 'insert failed' 
+            print 'insert failed: ' + sql
 
     def get_all_account(self):
         all = self.fetchall("account")
@@ -368,6 +376,26 @@ class Dao:
     def get_all_random(self):
         all = self.fetchall("randoms")
         ret = [item[1] for item in all]
+        return ret
+
+    def get_data(self, table, num):
+        total = self.total_row(table)
+        if num > total or num <= 0:
+            num = total
+        all = self.fetch(table, num)
+        ret = [item[1] for item in all]
+        return ret
+
+    def get_num_account(self, num):
+        if num > total or num <= 0:
+            num = total
+        all = self.fatch("account", num)
+        ret = []
+        for account in all:
+            if account[1][-6:] == 'qq.com':
+                ret.append(account[1]+', '+account[10])
+            else:
+                ret.append(account[1]+', '+account[2])
         return ret
 
     def execute_script(self, sqlscript):
