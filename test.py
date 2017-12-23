@@ -127,9 +127,12 @@ if __name__ == "__main__":
     #c2s.close_db()
 
     db = dao.Dao()
-    print db.get_quote(10)
-    print len(db.get_quote(199))
-    print db.total_row('quotes')
+    t0 = time.time()
+    quote = db.fetchone_by_id('quotes', 15002)
+    print quote
+    print quote[0][1]
+    t1 = time.time()
+    print t1-t0
 
     #count = 10000
     #while count > 0:
