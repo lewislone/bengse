@@ -11,7 +11,7 @@ $def with (datas)
             <br></br>
             <div class="input-prepend form-control spn2">
                 <span class="add-on">总数：</span>
-                <input class="form-control span1" id="prependedInput" type="text" placeholder=$len(datas['account']) readonly>
+                <input class="form-control span1" id="prependedInput" type="text" placeholder=$datas['accountlen'] readonly>
             </div>
 <textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
 $for account in datas['account']
@@ -31,7 +31,7 @@ $for account in datas['account']
             <br></br>
             <div class="input-prepend form-control spn2">
                 <span class="add-on">总数：</span>
-                <input class="form-control span1" id="prependedInput" type="text" placeholder=$len(datas['receiver']) readonly>
+                <input class="form-control span1" id="prependedInput" type="text" placeholder=$datas['receiverlen'] readonly>
             </div>
 <textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
 $for receiver in datas['receiver']
@@ -51,7 +51,7 @@ $for receiver in datas['receiver']
             <br></br>
             <div class="input-prepend form-control spn2">
                 <span class="add-on">总数：</span>
-                <input class="form-control span1" id="prependedInput" type="text" placeholder=$len(datas['name']) readonly>
+                <input class="form-control span1" id="prependedInput" type="text" placeholder=$datas['namelen'] readonly>
             </div>
 <textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
 $for name in datas['name']
@@ -71,7 +71,7 @@ $for name in datas['name']
             <br></br>
             <div class="input-prepend form-control spn2">
                 <span class="add-on">总数：</span>
-                <input class="form-control span1" id="prependedInput" type="text" placeholder=$len(datas['title']) readonly>
+                <input class="form-control span1" id="prependedInput" type="text" placeholder=$datas['titlelen'] readonly>
             </div>
 <textarea style='text-align: left;' rows="10" class="form-control span2" readonly>
 $for title in datas['title']
@@ -91,7 +91,7 @@ $for title in datas['title']
             <br></br>
             <div class="input-prepend form-control spn2">
                 <span class="add-on">总数：</span>
-                <input class="form-control span1" id="prependedInput" type="text" placeholder=$len(datas['quote']) readonly>
+                <input class="form-control span1" id="prependedInput" type="text" placeholder=$datas['quotelen'] readonly>
             </div>
 <textarea style="text-align:left;" rows="10" class="form-control span2" readonly>
 $for quote in datas['quote']

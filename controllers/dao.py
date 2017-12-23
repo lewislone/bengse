@@ -387,9 +387,10 @@ class Dao:
         return ret
 
     def get_num_account(self, num):
+        total = self.total_row('account')
         if num > total or num <= 0:
             num = total
-        all = self.fatch("account", num)
+        all = self.fetch("account", num)
         ret = []
         for account in all:
             if account[1][-6:] == 'qq.com':
