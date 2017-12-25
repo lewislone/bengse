@@ -151,6 +151,36 @@ c = {
                         },
                       ],
         'account_type': {
+                            '189.cn': {
+                                        'smtp': 'smtp.189.cn',
+                                        'max' : 10,
+                                        'interval' : 300,
+                                        'port': 25,
+                                    },
+                            'cn.com': {
+                                        'smtp': 'smtp.21cn.com',
+                                        'max' : 10,
+                                        'interval' : 300,
+                                        'port': 25,
+                                    },
+                            'box.ru': {
+                                        'smtp': 'smtp.inbox.ru',
+                                        'max' : 10,
+                                        'interval' : 300,
+                                        'port': 587,
+                                    },
+                            '@bk.ru': {
+                                        'smtp': 'smtp.bk.ru',
+                                        'max' : 10,
+                                        'interval' : 300,
+                                        'port': 587,
+                                    },
+                            'ist.ru': {
+                                        'smtp': 'smtp.list.ru',
+                                        'max' : 10,
+                                        'interval' : 300,
+                                        'port': 587,
+                                    },
                             'ail.ua': {
                                         'smtp': 'smtp.mail.ru',
                                         'max' : 10,
