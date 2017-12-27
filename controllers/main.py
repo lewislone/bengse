@@ -12,7 +12,7 @@ import mail.template as template
 import controllers.csv2sqlite as csv2sqlite
 import mail.batch_send as batch_send
 import utils.loadjson as loadjson
-#import threading
+import threading
 import json
 import traceback
 
@@ -238,10 +238,10 @@ class New:
             return self.render.new(self.form, self.db.total_row('receiver'))
 
         if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
-           #t =threading.Thread(target=self.thread_run, args=(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8')))
-           self.thread_run(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8'))
-           #t.setDaemon(True)
-           #t.start()
+           t =threading.Thread(target=self.thread_run, args=(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8')))
+           #self.thread_run(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8'))
+           t.setDaemon(True)
+           t.start()
 
         raise web.seeother('/new')
 
