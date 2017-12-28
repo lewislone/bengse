@@ -11,6 +11,7 @@ import utils.loadjson as loadjson
 import contain
 import temp as temp_module
 import logging
+import traceback
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
@@ -201,6 +202,7 @@ class Batchsend:
             except:
                 ret = -1
                 logging.warning('sent_mail failed!!!')
+                traceback.print_exc()
 
             self.__save_count(ret)
             if last_account == account[1]:
