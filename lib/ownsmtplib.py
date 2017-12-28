@@ -254,6 +254,7 @@ class SMTP:
         """
         self.timeout = timeout
         self.esmtp_features = {}
+        socket.setdefaulttimeout(120)
        
         if host:
       #      self.socket.socket.bind(('43.243.209.163', 0))
