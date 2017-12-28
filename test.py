@@ -126,13 +126,13 @@ if __name__ == "__main__":
     #print t2-t1
     #c2s.close_db()
 
-    db = dao.Dao()
-    t0 = time.time()
-    quote = db.fetchone_by_id('quotes', 15002)
-    print quote
-    print quote[0][1]
-    t1 = time.time()
-    print t1-t0
+    #db = dao.Dao()
+    #t0 = time.time()
+    #quote = db.fetchone_by_id('quotes', 15002)
+    #print quote
+    #print quote[0][1]
+    #t1 = time.time()
+    #print t1-t0
 
     #count = 10000
     #while count > 0:
@@ -160,3 +160,12 @@ if __name__ == "__main__":
     #logging.debug('This is debug message')
     #logging.info('This is info message')
     #logging.warning('This is warning message')
+
+    ar = []
+    for line in open("input"):
+        ar.append(line)
+    random.shuffle(ar)
+
+    f = open('output', 'w')
+    for item in ar:
+       f.write(item) 

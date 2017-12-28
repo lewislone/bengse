@@ -143,7 +143,8 @@ class Show:
               self.__store_file(data.accountlist, 'account.csv')
               if self.__to_db(2, self.tmpfiledir + '/account.csv'):
                   shutil.move(self.tmpfiledir + '/account.csv', './tmp/account.csv.'+time.asctime())
-                  self.datas['account'] = self.db.get_all_account() 
+                  self.datas['account'] = self.db.get_num_account(100)
+                  self.datas['accountlen'] = self.db.total_row('account') 
           if 'receiverlist' in data and data.receiverlist.filename:
               print 'in receiverlist'
               self.__store_file(data.receiverlist, 'receiver.csv')
@@ -170,7 +171,6 @@ class Show:
               self.__store_file(data.titlelist, 'title.csv')
               if self.__to_db(4, self.tmpfiledir + '/title.csv'):
                   shutil.move(self.tmpfiledir + '/title.csv', './tmp/title.csv.'+time.asctime())
-                  self.datas['title'] = self.db.get_all_title()
                   self.datas['title'] = self.db.get_data('subjects', 100)
                   self.datas['titlelen'] = self.db.total_row('subjects')
         except:
