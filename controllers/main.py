@@ -240,7 +240,7 @@ class New:
         if not os.path.exists(os.getcwd() + "/tmp/senderrunning"):
            t =threading.Thread(target=self.thread_run, args=(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8')))
            #self.thread_run(self.form.d.title.encode('utf-8'), self.form.d.content.encode('utf-8'))
-           t.setDaemon(True)
+           t.setDaemon(False)
            t.start()
 
         raise web.seeother('/new')
