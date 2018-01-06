@@ -12,6 +12,7 @@ import contain
 import temp as temp_module
 import logging
 import traceback
+import shutil
 
 class Batchsend:
     def __init__(self, title=' ', content=' '):
@@ -222,6 +223,8 @@ class Batchsend:
     def stop(self):
         if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
             os.remove(os.getcwd() + "/tmp/senderrunning")
+        if os.path.exists(os.getcwd() + '/tmp/tmp.json'):
+            shutil.move(os.getcwd() + '/tmp/tmp.json', './tmp/tmp.json'+time.asctime())
         logging.info("stop...")
 
 if __name__ == "__main__":

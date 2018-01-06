@@ -222,6 +222,8 @@ class New:
         #        loadjson.loadtojson(data, path)
         if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
             os.remove(os.getcwd() + "/tmp/senderrunning")
+        if os.path.exists(os.getcwd() + '/tmp/tmp.json'):
+            shutil.move(os.getcwd() + '/tmp/tmp.json', './tmp/tmp.json'+time.asctime())
         print "end batch sent...."
 
     def GET(self):
@@ -233,6 +235,8 @@ class New:
             print 'stop send mail'
             if os.path.exists(os.getcwd() + '/tmp/senderrunning'):
                 os.remove(os.getcwd() + "/tmp/senderrunning")
+            if os.path.exists(os.getcwd() + '/tmp/tmp.json'):
+                shutil.move(os.getcwd() + '/tmp/tmp.json', './tmp/tmp.json'+time.asctime())
 
         if not self.form.validates():
             return self.render.new(self.form, self.db.total_row('receiver'))
