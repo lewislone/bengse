@@ -317,9 +317,9 @@ class Dao:
                 return
             row['random'] = new['random']
         elif table is "quotes":
-            if self.find_by_primary_key(table, new['quote']) > 0:
-                print 'quote: %s exist'%new['quote']
-                return
+            #if self.find_by_primary_key(table, new['quote']) > 0:
+            #    print 'quote: %s exist'%new['quote']
+            #    return
             row['quote'] = new['quote']
         else:
             print "table %s is not exist"%table

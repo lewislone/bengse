@@ -161,11 +161,30 @@ if __name__ == "__main__":
     #logging.info('This is info message')
     #logging.warning('This is warning message')
 
-    ar = []
-    for line in open("input"):
-        ar.append(line)
-    random.shuffle(ar)
+    #ar = []
+    #for line in open("input"):
+    #    ar.append(line)
+    #random.shuffle(ar)
 
-    f = open('output', 'w')
-    for item in ar:
-       f.write(item) 
+    #f = open('output', 'w')
+    #for item in ar:
+    #   f.write(item) 
+
+    for line in open("quote0.csv"):
+        try:
+            line.decode('utf-8').encode('utf-8')
+        except:
+            print line
+
+    db = dao.Dao()
+    quotes = db.fetchall('quotes')
+    print len(quotes)
+    i = len(quotes) 
+    #i = 10317
+    while i > 0:
+        try:
+            quote = db.fetchone_by_id('quotes', i)
+            #print quote[0][1]
+        except:
+            print 'error', quote
+        i = i - 1
