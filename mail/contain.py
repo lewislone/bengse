@@ -9,7 +9,7 @@ import controllers.dao as dao
 class Contain:
     def __init__(self):
         self.db = dao.Dao()
-        self.temp=['Temp0', 'Temp1', 'Temp2']
+        self.temp=['Temp0', 'Temp2']
         path = os.getcwd()+'/mail/'
         sys.path.append(path)
 
